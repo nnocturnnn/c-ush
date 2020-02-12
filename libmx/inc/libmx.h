@@ -19,6 +19,7 @@ void mx_pop_back(t_list **head);
 int mx_list_size(t_list *list);
 t_list *mx_sort_list(t_list *lst, bool (*cmp)(void *, void *));
 
+int mx_count_char(char *str, char c);
 int mx_strcmp(const char *s1, const char *s2);
 int mx_binary_search(char **arr, int size, const char *s, int *count);
 int mx_bubble_sort(char **arr, int size);
@@ -59,6 +60,7 @@ void mx_strdel(char **str);
 char *mx_strndup(const char *s1, size_t n);
 char *mx_strdup(const char *str);
 int mx_strlen(const char *c);
+int mx_sizearr(char **arr);
 char *mx_strnew(const int size);
 void mx_str_reverse(char *s);
 char *mx_strcat(char *s1, const char *s2);
@@ -73,6 +75,7 @@ int mx_atoi(const char *str);
 bool mx_isspace(char c);
 bool mx_isdigit(int c);
 bool mx_isalpha(int c);
+int	mx_strequ(char const *s1, char const *s2);
 char *mx_strchr(const char *s, int c);
 int mx_read_line(char **line, int buf_size, char delim, const int fd);
 

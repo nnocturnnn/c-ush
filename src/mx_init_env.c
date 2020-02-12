@@ -1,14 +1,5 @@
 #include "ush.h"
 
-static int envv_len(char **envv) {
-	int	i = -1;
-	int	count = 0;
-    
-	while (envv[++i])
-		count++;
-	return (count);
-}
-
 char **mx_init_envr(int argc, char **argv, char **envr) {
     char **env;
     int i = -1;

@@ -3,12 +3,13 @@
 static char **mx_parse_input(char *input) {
     char *replacoperator = mx_replace_substr(input, "&&", ";");
     char **split_str_by_sep = mx_strsplit(replacoperator,';');
-    char **without_space;
+    char **without_space = (char **)malloc(sizeof(char *) * 1000);
     int i = 0;
     while (split_str_by_sep[i]){
-        without_space[i] = mx_del_extra_spaces(mx_strdup(split_str_by_sep[i]));
+        without_space[i] = mx_strdup(mx_del_extra_spaces(split_str_by_sep[i]));
         i++;
     }
+    without_space[i] = NULL;
     return without_space;
 }
 
