@@ -5,7 +5,7 @@ int mx_find_env_var(char *var,char **env) {
     char *tmp = mx_strjoin(var, "=");
     
     while (env[++i]) {
-        if (mx_get_substr_index(env[i], tmp) > -1) {
+        if (mx_get_substr_index(env[i], tmp) == 0) {
             // free(tmp);
             return i;
         }
@@ -69,5 +69,5 @@ int mx_unsetenv_builtin(char **arg, char **env) {
 		if (env[var_pos])
 			mx_remove_env_var(var_pos, env);
 	}
-	return (1);
+	return 1;
 }

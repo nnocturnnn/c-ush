@@ -36,6 +36,14 @@ enum m_eror{
     CD_STR_NOT_PWD,
 };
 
+typedef struct s_ush {
+    char **env;
+    char **commands;
+    char **alias;
+    char **var;
+    int have_var;
+} t_ush;
+
 int envv_len(char **envv);
 void mx_errors(enum m_eror errors, char *a);
 char **mx_init_envr(int argc, char **argv, char **envr);
@@ -60,5 +68,6 @@ void mx_set_env_var(char *key, char *value, char **env);
 char **realloc_envv(int new_size, char **env);
 void mx_remove_env_var(int var_pos, char **env);
 int mx_pwd_builtin(char **arg, char **env);
+int mx_which_builtin(char **arg, char **env);
 
 #endif 

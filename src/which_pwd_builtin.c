@@ -15,3 +15,24 @@ int mx_pwd_builtin(char **arg, char **env) {
         return 1;
     }
 }
+
+int mx_which_builtin(char **arg, char **env) {
+    int	i = -1;
+    int q = -1;
+	char *bin_path;
+	char **path = mx_strsplit(mx_get_env_var("PATH", env), ':');
+	struct stat	f;
+
+    // while (arg[++q]) {
+    while (path && path[++i]) {
+        if (mx_get_substr_index(arg[i], path[i]) == 0)
+            bin_path = mx_strdup(arg[i]);
+        else 
+            bin_path = mx_pathjoin(path[i], arg[i]);
+        mx_printstr(bin_path);
+        mx_printstr("\n");
+    }
+    // }
+	// free(path);
+	return 0;
+}

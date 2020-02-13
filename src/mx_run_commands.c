@@ -43,8 +43,8 @@ static int check_builtins(char **command, char **env) {
 		return (mx_export_builtin(command + 1, env));
 	else if (mx_strequ(command[0], "unsetenv"))
 		return (mx_unsetenv_builtin(command + 1, env));
-    // else if (mx_strequ(command[0], "which"))
-    //     return (mx_which_builtin(command + 1, env));
+    else if (mx_strequ(command[0], "which"))
+        return (mx_which_builtin(command + 1, env));
     else if (mx_strequ(command[0], "pwd"))
         return (mx_pwd_builtin(command + 1, env));
     else if (mx_strequ(command[0], "env")) {

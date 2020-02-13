@@ -2,11 +2,12 @@
 
 char **realloc_envv(int new_size, char **env) {
     int i = -1;
-	char **new = (char **)malloc(sizeof(char *) * (new_size + 1));;
+	char **new;
+    new = (char **)malloc(sizeof(char *) * (new_size + 1));;
 
 	while (env[++i] && i < new_size) {
 		new[i] = mx_strdup(env[i]);
-		free(env[i]);
+		mx_strdel(&env[i]);
 	}
 	free(env);
 	return new;
@@ -37,14 +38,12 @@ char *mx_get_env_var(char *var, char **env) {
 }
 
 void mx_remove_env_var(int var_pos, char **env) {
-    int i;
+    int i = var_pos;
     int var_count;
 
-    mx_strdel(&env[var_pos]);
-    i = var_pos;
+    free(env[var_pos]);
 	var_count = var_pos + 1;
-	while (env[i + 1])
-	{
+	while (env[i + 1]) {
 		env[i] = mx_strdup(env[i + 1]);
 		free(env[i + 1]);
 		i++;
