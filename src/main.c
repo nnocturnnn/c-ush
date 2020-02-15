@@ -19,7 +19,7 @@ static int exec_commands(char **commands, char **env) {
 
     while (commands[++i]) {
         command = mx_strsplit(commands[i], ' ');
-        exit = mx_run_command(command, env);
+        exit = mx_run_command(command, env, 0);
         //free(&command);
         if (exit == 1)
             break;
@@ -27,15 +27,13 @@ static int exec_commands(char **commands, char **env) {
     return exit;
 }
 
-
-int main(int argc, char **argv, char **envr) {
+static void circle_main(char **env) {
     char *input;
-    int ret;
+    char **alias;
     char **commands;
-    char **env;
+    int ret;
 
-    env = mx_init_envr(argc, argv, envr);
-    while (1) {
+     while (1) {
         signal(SIGINT, signal_handler);
         mx_display(env);
         commands = mx_get_input(&input, env);
@@ -49,6 +47,13 @@ int main(int argc, char **argv, char **envr) {
         if (ret == -1) 
             break;
 	}
+}
+
+int main(int argc, char **argv, char **envr) {
+    char **env;
+
+    env = mx_init_envr(argc, argv, envr);
+    circle_main(env);
     // free(&env);
     exit(1);
 }

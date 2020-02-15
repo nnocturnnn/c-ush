@@ -13,3 +13,15 @@ char **mx_init_envr(int argc, char **argv, char **envr) {
     }
     return env;
 }
+
+char **mx_init_export(char **env) {
+    char **export = (char **)malloc(sizeof(char *) * (envv_len(env) +1));
+    int i = -1;
+
+    while(env[++i]) {
+        if (!(export[i] = mx_strdup(env[i])))
+            mx_exit_shell(env);
+    }
+    mx_quicksort(export, 0, mx_sizearr(export));
+    return export;
+}

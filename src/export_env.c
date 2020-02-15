@@ -1,19 +1,5 @@
 #include "ush.h"
 
-int mx_find_env_var(char *var,char **env) {
-    int i = -1;
-    char *tmp = mx_strjoin(var, "=");
-    
-    while (env[++i]) {
-        if (mx_get_substr_index(env[i], tmp) == 0) {
-            // free(tmp);
-            return i;
-        }
-        // free(tmp);
-    }
-    return i;
-}
-
 void mx_set_env_var(char *key, char *value, char **env) {
 	int	pos = mx_find_env_var(key, env);;
 	char *tmp = mx_strjoin("=", value);
@@ -31,16 +17,17 @@ void mx_set_env_var(char *key, char *value, char **env) {
 		else
 			env[pos] = mx_strjoin(key, "=");
 	}
-	free(tmp);
+	//free(tmp);
 }
 
 int mx_export_builtin(char **arg, char **env) {
     int i = -1;
     char **key_val;
+    char **sorted_env = mx_init_export(env);
 
     if (!arg[0]) {
-        mx_quicksort(env, 0, mx_sizearr(env));
-        mx_print_env(env);
+        mx_quicksort(sorted_env, 0, mx_sizearr(env));
+        mx_print_env(sorted_env);
         return 1;
     }
     while (arg[++i]) {
@@ -51,23 +38,5 @@ int mx_export_builtin(char **arg, char **env) {
             mx_set_env_var(key_val[0],key_val[1], env);
         }
     }
-	return 1;
-}
-
-
-int mx_unsetenv_builtin(char **arg, char **env) {
-    int	i;
-	int	var_pos;
-
-	if (!arg[0]) {
-		mx_errors(UNSET_ERR, "uns");
-		return 1;
-	}
-	i = -1;
-	while (arg[++i]) {
-		var_pos = mx_find_env_var(arg[i], env);
-		if (env[var_pos])
-			mx_remove_env_var(var_pos, env);
-	}
 	return 1;
 }

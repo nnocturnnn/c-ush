@@ -25,7 +25,9 @@ int envv_len(char **envv) {
 char *mx_get_env_var(char *var, char **env) {
     char *tmp;
     int i = -1;
-
+    
+    if(!env)
+        return NULL;
     while (env[++i]) {
         tmp = mx_strjoin(var, "=");
         if ((mx_get_substr_index(env[i], tmp)) == 0) {
@@ -35,19 +37,4 @@ char *mx_get_env_var(char *var, char **env) {
         free(tmp);
     }
     return NULL;
-}
-
-void mx_remove_env_var(int var_pos, char **env) {
-    int i = var_pos;
-    int var_count;
-
-    free(env[var_pos]);
-	var_count = var_pos + 1;
-	while (env[i + 1]) {
-		env[i] = mx_strdup(env[i + 1]);
-		free(env[i + 1]);
-		i++;
-		var_count++;
-	}
-	env = realloc_envv(var_count - 1, env);
 }

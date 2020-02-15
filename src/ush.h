@@ -34,6 +34,8 @@ enum m_eror{
     CD_NON_DIR,
     CD_TO_MANY,
     CD_STR_NOT_PWD,
+    ENV_ILL,
+    ENV_OPTION_REQ,
 };
 
 typedef struct s_ush {
@@ -56,7 +58,7 @@ char *mx_pathjoin(char *p1, char *p2);
 char **mx_get_input(char **input, char **env);
 void signal_handler(int signo);
 void proc_signal_handler(int signo); 
-int mx_run_command(char **commands, char **env);
+int mx_run_command(char **commands, char **env, int run_mode);
 void mx_print_env(char **env);
 int mx_unsetenv_builtin(char **arg, char **env);
 int mx_export_builtin(char **arg, char **env);
@@ -66,8 +68,10 @@ void mx_change_dir(char *path, int printh_path, char **env);
 int mx_find_env_var(char *var,char **env);
 void mx_set_env_var(char *key, char *value, char **env);
 char **realloc_envv(int new_size, char **env);
-void mx_remove_env_var(int var_pos, char **env);
+void mx_remove_env_var(char *name_var, char **env);
 int mx_pwd_builtin(char **arg, char **env);
 int mx_which_builtin(char **arg, char **env);
+int mx_env_builtin(char **arg, char **env);
+char **mx_init_export(char **env);
 
 #endif 

@@ -48,8 +48,7 @@ static int check_builtins(char **command, char **env) {
     else if (mx_strequ(command[0], "pwd"))
         return (mx_pwd_builtin(command + 1, env));
     else if (mx_strequ(command[0], "env")) {
-		mx_print_env(env);
-		return 1;
+		return (mx_env_builtin(command + 1, env));
     }
 	return 0;
 }
@@ -76,22 +75,27 @@ static int check_bins(char **commands, char **env) {
 	return 0;
 }
 
-int mx_run_command(char **commands, char **env) {
+int mx_run_command(char **commands, char **env, int run_mode) {
     struct stat f;
     int is_builtin;
 
-    if ((is_builtin = check_builtins(commands, env)) == 1 || 
-        check_bins(commands, env))
-        return 0;
+    if (run_mode)
+        if (check_bins(commands, env) ||
+            (is_builtin = check_builtins(commands, env)) == 1)
+                return 0;
+    if (!run_mode)
+        if ((is_builtin = check_builtins(commands, env)) == 1 ||
+            check_bins(commands, env) )
+                return 0;
     if (is_builtin < 0)
         return -1;
-    if (lstat(commands[0], &f) != -1) {
-        if (f.st_mode & S_IFDIR) {
-            mx_change_dir(commands[0], 0, env);
-            return 0;
-        } else if (f.st_mode & S_IXUSR)
-            return (run_cmd(mx_strdup(commands[0]), commands, env));
-    }
+    // if (lstat(commands[0], &f) != -1) {
+    //     if (f.st_mode & S_IFDIR) {
+    //         mx_change_dir(commands[0], 0, env);
+    //         return 0;
+    //     } else if (f.st_mode & S_IXUSR)
+    //         return (run_cmd(mx_strdup(commands[0]), commands, env));
+    // }
     mx_errors(USH_NF, commands[0]);
     return 0;
 }
