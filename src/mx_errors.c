@@ -38,13 +38,13 @@ void mx_errors(enum m_eror errors, char *a) {
 		mx_printerr(a);
         mx_printerr("\n");
         mx_printerr("usage: env [-i] [-P utilpath] [-u name]\n");
-        mx_printerr("           [name=value ...] [utility [argument ...]]");
+        mx_printerr("           [name=value ...] [utility [argument ...]]\n");
     } else if (errors == ENV_OPTION_REQ) {
         mx_printerr("env: option requires an argument -");
         mx_printerr(a);
         mx_printerr("\n");
         mx_printerr("usage: env [-i] [-P utilpath] [-u name]\n");
-        mx_printerr("           [name=value ...] [utility [argument ...]]");
+        mx_printerr("           [name=value ...] [utility [argument ...]]\n");
     }
     
     

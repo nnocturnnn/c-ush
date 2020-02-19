@@ -9,14 +9,13 @@ static void	print_path(char *path, char **env) {
 
 static int cd_with_flag(char **arg, char **env) {
     struct stat buffy;
-    char *home_path  = mx_get_env_var("HOME", env);
     char buff[4096 + 1];
     char *cwd;
 
     if (mx_strequ(arg[0], "-P")) {
         mx_change_dir(arg[1], 0, env);
         cwd = getcwd(buff, 4096);
-        mx_set_env_var("PWD",cwd,env);
+        mx_set_env_var("PWD",cwd, env);
         return 1;
     } else if (mx_strequ(arg[0], "-s")) {
         lstat(mx_pathjoin(mx_get_env_var("PWD", env), arg[1]),&buffy);
@@ -54,15 +53,21 @@ static int has_two_args(char **args, char **env) {
 }
 
 void mx_change_dir(char *path, int printh_path, char **env) {
-    char *cwd;
-	char buff[4097];
+    char buff2[4097];
+    char buff[4097];
+    char *n_cwd;
+    char *cwd = getcwd(buff, 4096);
 
-	cwd = getcwd(buff, 4096);
 	if (!chdir(path)) {
 		if (printh_path) {
 			print_path(path, env);
 		    mx_printchar('\n');
 		}
+        n_cwd = getcwd(buff2, 4096);
+        if (mx_strequ(path, ".."))
+            mx_set_env_var("PWD", n_cwd, env);
+        else
+            mx_set_env_var("PWD", mx_pathjoin(cwd, path), env);
 		mx_set_env_var("OLDPWD", cwd, env);
 	} else {
         if (access(path, F_OK) == -1)
