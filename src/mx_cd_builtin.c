@@ -9,16 +9,17 @@ static void	print_path(char *path, char **env) {
 
 static int cd_with_flag(char **arg, char **env) {
     struct stat buffy;
+    char *home_path  = mx_get_env_var("HOME", env);
     char buff[4096 + 1];
     char *cwd;
 
     if (mx_strequ(arg[0], "-P")) {
         mx_change_dir(arg[1], 0, env);
         cwd = getcwd(buff, 4096);
-        mx_set_env_var("PWD",cwd, env);
+        mx_set_env_var("PWD",cwd,env);
         return 1;
     } else if (mx_strequ(arg[0], "-s")) {
-        lstat(mx_pathjoin(mx_get_env_var("PWD", env), arg[1]),&buffy);
+        lstat(arg[1],&buffy);
         if ((buffy.st_mode & S_IFMT) == S_IFLNK)
             mx_errors(CD_NON_DIR, arg[0]);
         else
@@ -57,6 +58,7 @@ void mx_change_dir(char *path, int printh_path, char **env) {
     char buff[4097];
     char *n_cwd;
     char *cwd = getcwd(buff, 4096);
+    struct stat buffy;
 
 	if (!chdir(path)) {
 		if (printh_path) {
@@ -64,7 +66,13 @@ void mx_change_dir(char *path, int printh_path, char **env) {
 		    mx_printchar('\n');
 		}
         n_cwd = getcwd(buff2, 4096);
-        if (mx_strequ(path, ".."))
+        lstat(path,&buffy);
+        if ((buffy.st_mode & S_IFMT) == S_IFLNK) {
+            if (mx_get_char_index(path,'/') == 0)
+                mx_set_env_var("PWD",path, env);
+            else
+                mx_set_env_var("PWD",n_cwd,env);
+        } else if (mx_strequ(path, "..") || (mx_get_char_index(path,'/') == 0))
             mx_set_env_var("PWD", n_cwd, env);
         else
             mx_set_env_var("PWD", mx_pathjoin(cwd, path), env);

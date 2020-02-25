@@ -21,6 +21,7 @@
 #include <sys/acl.h>
 #include <sys/xattr.h>
 #include <time.h>
+#include <termios.h>
 #include "../libmx/inc/libmx.h"
 
 enum m_eror{
@@ -39,14 +40,28 @@ enum m_eror{
 };
 
 typedef struct s_ush {
-    char **env;
     char **commands;
     char **alias;
     char **var;
+    char **history;
+    int count_var;
     int have_var;
 } t_ush;
 
+#define MX_OK (0<<1)
+#define MX_UP_AR "\x1b\x5b\x41"
+#define MX_DOWN_AR "\x1b\x5b\x42"
+#define MX_RIGHT_AR "\x1b\x5b\x43"
+#define MX_LEFT_AR "\x1b\x5b\x44"
+#define MX_MOVE_CURSOR_LEFT "\033[1C"
+#define MX_MOVE_CURSOR_RIGHT "\033[1D"
+
+struct termios stored_settings;
+
+void set_input_mode (void);
+void key_handler(t_ush data);
 int envv_len(char **envv);
+void mx_save_history(char *input, t_ush data);
 void mx_errors(enum m_eror errors, char *a);
 char **mx_init_envr(int argc, char **argv, char **envr);
 void mx_display(char **env);
@@ -55,23 +70,26 @@ int mx_isemptystr(char *str, int consider_space);
 void mx_exit_shell(char **env);
 char *mx_get_env_var(char *var, char **env);
 char *mx_pathjoin(char *p1, char *p2);
-char **mx_get_input(char **input, char **env);
+char **mx_get_input(char **input, t_ush data, char ***env);
 void signal_handler(int signo);
 void proc_signal_handler(int signo); 
-int mx_run_command(char **commands, char **env, int run_mode);
+int mx_run_command(char **commands, t_ush data, char ***env, int run_mode);
 void mx_print_env(char **env);
-int mx_unsetenv_builtin(char **arg, char **env);
-int mx_export_builtin(char **arg, char **env);
-int mx_echo_builtin(char **arg, char **env);
+int mx_export_builtin(char **arg, t_ush data, char **env);
+int mx_echo_builtin(char **arg, t_ush data);
 int mx_cd_builtin(char **arg, char **env);
 void mx_change_dir(char *path, int printh_path, char **env);
 int mx_find_env_var(char *var,char **env);
 void mx_set_env_var(char *key, char *value, char **env);
 char **realloc_envv(int new_size, char **env);
-void mx_remove_env_var(char *name_var, char **env);
 int mx_pwd_builtin(char **arg, char **env);
 int mx_which_builtin(char **arg, char **env);
-int mx_env_builtin(char **arg, char **env);
+int mx_env_builtin(char **arg, t_ush data, char **env);
 char **mx_init_export(char **env);
+int mx_alias(char **arg, t_ush data, char **env);
+void mx_reset_input_mode(void);
+int mx_unsetenv_builtin(char **arg, char ***env);
+int	mx_isinenv(char **env, char *var);
+char **mx_remove_env_var(char *name_var, char **env);
 
 #endif 

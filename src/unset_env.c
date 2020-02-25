@@ -1,6 +1,6 @@
 #include "ush.h"
 
-void mx_remove_env_var(char *name_var, char **env) {
+char **mx_remove_env_var(char *name_var, char **env) {
     int var_pos = mx_find_env_var(name_var, env);
     int i = var_pos;
     int var_count;
@@ -14,25 +14,10 @@ void mx_remove_env_var(char *name_var, char **env) {
 		var_count++;
 	}
 	env = realloc_envv(var_count - 1, env);
+    return env;
 }
 
-
-int mx_find_env_var(char *var,char **env) {
-    int i = -1;
-    char *tmp = mx_strjoin(var, "=");
-    
-    while (env[++i]) {
-        if (mx_get_substr_index(env[i], tmp) == 0) {
-            //free(tmp);
-            return i;
-        }
-        // free(tmp);
-    }
-    return i;
-}
-
-
-int mx_unsetenv_builtin(char **arg, char **env) {
+int mx_unsetenv_builtin(char **arg, char ***env) {
     int	i;
 	int	var_pos;
 
@@ -42,9 +27,10 @@ int mx_unsetenv_builtin(char **arg, char **env) {
 	}
 	i = -1;
 	while (arg[++i]) {
-		var_pos = mx_find_env_var(arg[i], env);
+        // mx_printstr(arg[i]);
+		var_pos = mx_find_env_var(arg[i], *(env));
 		if (env[var_pos])
-			mx_remove_env_var(arg[i], env);
+			*(env) = mx_remove_env_var(arg[i], *(env));
 	}
 	return 1;
 }

@@ -10,6 +10,8 @@ static int mx_strncmp(const char *s1, const char *s2, int n) {
 }
 
 char *mx_replace_substr(const char *str, const char *sub, const char *replace) {
+    if (replace == NULL)
+        return mx_strdup(str);
     if (!str || !sub || !replace) return NULL;
     int sub_len = mx_strlen(sub);
     int replace_len = mx_strlen(replace);

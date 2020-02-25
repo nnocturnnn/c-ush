@@ -1,5 +1,20 @@
 #include "ush.h"
 
+int mx_find_env_var(char *var,char **env) {
+    int i = -1;
+    char *tmp = mx_strjoin(var, "=");
+    
+    while (env[++i]) {
+        if (mx_get_substr_index(env[i], tmp) == 0) {
+            //free(tmp);
+            return i;
+        }
+        // free(tmp);
+    }
+    return i;
+}
+
+
 void mx_set_env_var(char *key, char *value, char **env) {
 	int	pos = mx_find_env_var(key, env);;
 	char *tmp = mx_strjoin("=", value);
@@ -20,7 +35,7 @@ void mx_set_env_var(char *key, char *value, char **env) {
 	//free(tmp);
 }
 
-int mx_export_builtin(char **arg, char **env) {
+int mx_export_builtin(char **arg, t_ush data, char **env) {
     int i = -1;
     char **key_val;
     char **sorted_env = mx_init_export(env);
