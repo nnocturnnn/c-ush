@@ -6,9 +6,11 @@ static int which_check_built(char *flag,char *command) {
                        "pwd","env","fg", NULL};
     while (builtin[++i] != NULL) {
         if (mx_strequ(command,builtin[i])) {
-            mx_printstr(command);
-            mx_printstr(": ush built-in command");
-            mx_printstr("\n");
+        	if (mx_strequ(flag, "-s")) {
+	            mx_printstr(command);
+	            mx_printstr(": ush built-in command");
+	            mx_printstr("\n");
+        	}
             return 1;
         }
     }
@@ -43,7 +45,7 @@ int mx_which_builtin(char **arg, char **env) {
         if (!which_check_built(arg[0],arg[q]) || mx_strequ(arg[0],"-a")) {
             while (path && path[++i]) {
                 bin_path = mx_pathjoin(path[i], arg[i]);
-                if (access(bin_path, F_OK) != -1)
+                if (access(bin_path, F_OK) != -1 && !mx_strequ(arg[0],"-s"))
                     mx_printstr(bin_path);
                 return 0;
             }
