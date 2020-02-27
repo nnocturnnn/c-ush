@@ -8,7 +8,7 @@ char **mx_remove_env_var(char *name_var, char **env) {
     free(env[var_pos]);
 	var_count = var_pos + 1;
 	while (env[i + 1]) {
-		env[i] = mx_strdup(env[i + 1]);
+		env[i] = strdup(env[i + 1]);
 		free(env[i + 1]);
 		i++;
 		var_count++;
@@ -27,7 +27,6 @@ int mx_unsetenv_builtin(char **arg, char ***env) {
 	}
 	i = -1;
 	while (arg[++i]) {
-        // mx_printstr(arg[i]);
 		var_pos = mx_find_env_var(arg[i], *(env));
 		if (env[var_pos])
 			*(env) = mx_remove_env_var(arg[i], *(env));

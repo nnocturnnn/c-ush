@@ -45,6 +45,13 @@ void mx_errors(enum m_eror errors, char *a) {
         mx_printerr("\n");
         mx_printerr("usage: env [-i] [-P utilpath] [-u name]\n");
         mx_printerr("           [name=value ...] [utility [argument ...]]\n");
+    } else if (errors == WHC_NF) {
+        mx_printerr(a);
+        mx_printerr(" not found\n");
+    } else if (errors == ERR_NAR) {
+        mx_printerr("ush: exit: ");
+        mx_printerr(a);
+        mx_printerr(": numeric argument required\n");
     }
     
     

@@ -8,10 +8,10 @@ char **mx_init_envr(int argc, char **argv, char **envr) {
     (void)argv;
     env = (char **)malloc(sizeof(char *) * (envv_len(envr) + 1));
     while(envr[++i]) {
-        if (!(env[i] = mx_strdup(envr[i])))
+        if (!(env[i] = strdup(envr[i])))
             mx_exit_shell(env);
     }
-    mx_set_env_var("SHLVL",mx_itoa(atoi(mx_get_env_var("SHLVL",env)) + 1),env);
+    mx_set_env_var("SHLVL",mx_itoa(atoi(mx_get_env_var("SHLVL",env)) + 1),&env);
     return env;
 }
 
@@ -20,7 +20,7 @@ char **mx_init_export(char **env) {
     int i = -1;
 
     while(env[++i]) {
-        if (!(export[i] = mx_strdup(env[i])))
+        if (!(export[i] = strdup(env[i])))
             mx_exit_shell(env);
     }
     mx_quicksort(export, 0, mx_sizearr(export));

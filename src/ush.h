@@ -37,18 +37,18 @@ enum m_eror{
     CD_STR_NOT_PWD,
     ENV_ILL,
     ENV_OPTION_REQ,
+    WHC_NF,
+    ERR_NAR,
 };
 
 typedef struct s_ush {
     char **commands;
     char **alias;
     char **var;
-    char **history;
-    int count_var;
-    int have_var;
+    int logical;
 } t_ush;
 
-#define MX_OK (0<<1)
+#define MX_OK 00
 #define MX_UP_AR "\x1b\x5b\x41"
 #define MX_DOWN_AR "\x1b\x5b\x42"
 #define MX_RIGHT_AR "\x1b\x5b\x43"
@@ -58,6 +58,7 @@ typedef struct s_ush {
 
 struct termios stored_settings;
 
+int mx_exit_builtin(char **arg);
 void set_input_mode (void);
 void key_handler(t_ush data);
 int envv_len(char **envv);
@@ -75,12 +76,12 @@ void signal_handler(int signo);
 void proc_signal_handler(int signo); 
 int mx_run_command(char **commands, t_ush data, char ***env, int run_mode);
 void mx_print_env(char **env);
-int mx_export_builtin(char **arg, t_ush data, char **env);
+int mx_export_builtin(char **arg, t_ush data, char ***env);
 int mx_echo_builtin(char **arg, t_ush data);
 int mx_cd_builtin(char **arg, char **env);
 void mx_change_dir(char *path, int printh_path, char **env);
 int mx_find_env_var(char *var,char **env);
-void mx_set_env_var(char *key, char *value, char **env);
+void mx_set_env_var(char *key, char *value, char ***env);
 char **realloc_envv(int new_size, char **env);
 int mx_pwd_builtin(char **arg, char **env);
 int mx_which_builtin(char **arg, char **env);
@@ -91,5 +92,6 @@ void mx_reset_input_mode(void);
 int mx_unsetenv_builtin(char **arg, char ***env);
 int	mx_isinenv(char **env, char *var);
 char **mx_remove_env_var(char *name_var, char **env);
+int mx_exit_builtin(char **arg);
 
 #endif 

@@ -6,8 +6,8 @@ char **realloc_envv(int new_size, char **env) {
     new = (char **)malloc(sizeof(char *) * (new_size + 1));;
 
 	while (env[++i] && i < new_size) {
-		new[i] = mx_strdup(env[i]);
-		free(env[i]);
+		new[i] = strdup(env[i]);
+		// free(env[i]);
 	}
 	free(env);
 	return new;

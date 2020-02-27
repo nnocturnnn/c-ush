@@ -9,7 +9,7 @@ char *mx_parse_home_path(char *path, int reverse, char **env) {
     if (!home_path)
         return NULL;
     if (strcmp(home_path, path) == 0)
-        return mx_strdup(home_path);
+        return strdup(home_path);
     new = mx_replace_substr(path,home_path, "~");
     return new;
 }
