@@ -87,7 +87,7 @@ int mx_pwd_builtin(char **arg, char **env);
 int mx_which_builtin(char **arg, char **env);
 int mx_env_builtin(char **arg, t_ush data, char **env);
 char **mx_init_export(char **env);
-int mx_alias(char **arg, t_ush data, char **env);
+int mx_alias(char **arg, char **data, char **env);
 void mx_reset_input_mode(void);
 int mx_unsetenv_builtin(char **arg, char ***env);
 int	mx_isinenv(char **env, char *var);

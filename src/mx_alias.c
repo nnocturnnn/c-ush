@@ -1,18 +1,17 @@
 #include "ush.h"
 
-int mx_alias(char **arg, t_ush data, char **env) {
+int mx_alias(char **arg, char **data, char **env) {
     int i = -1;
     int j = -1;
 
-    while (data.alias[++j])
+    while (data[++j])
         j++;
     if (!arg[0]) {
-        mx_print_env(data.alias);
+        mx_print_env(data);
     }
     else {
         while(arg[++i]) {
-            data.alias[j] = strdup(arg[i]);
-            j++;
+            mx_set_env_var()
         }
     }
     return 1;

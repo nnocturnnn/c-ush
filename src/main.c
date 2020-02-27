@@ -137,7 +137,8 @@ static void circle_main(char **env, t_ush data) {
 
      while (1) {
         signal(SIGINT, signal_handler);
-        mx_display(env);
+        if (isatty(0))
+            mx_display(env);
         data.commands = mx_get_input(&input, data, &env);
         if (mx_isemptystr(input, 1)) {
             free(input);

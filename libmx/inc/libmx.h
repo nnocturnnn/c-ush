@@ -78,5 +78,7 @@ bool mx_isalpha(int c);
 int	mx_strequ(char const *s1, char const *s2);
 char *mx_strchr(const char *s, int c);
 int mx_read_line(char **line, int buf_size, char delim, const int fd);
+void mx_del_list(t_list **head);
+char *get_word_by_char(char *str, char sym);
 
 #endif

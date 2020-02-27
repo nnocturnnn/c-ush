@@ -39,7 +39,7 @@ static int check_builtins(char **command, t_ush data, char ***env) {
 	// else if (mx_strequ(command[0], "echo"))
 	// 	return (mx_echo_builtin(command + 1, data));
     else if (mx_strequ(command[0], "alias"))
-        return (mx_alias(command + 1, data, *env));
+        return (mx_alias(command + 1, data.alias, *env));
 	else if (mx_strequ(command[0], "cd"))
 		return (mx_cd_builtin(command + 1, *env));
 	else if (mx_strequ(command[0], "export"))
@@ -94,9 +94,9 @@ int mx_run_command(char **commands, t_ush data, char ***env, int run_mode) {
     if (is_builtin < 0)
         return -1;
     mx_errors(USH_NF, commands[0]);
-    if (data.logical == -1)
-        return 1;
-    if (data.logical == 1)
-        return 0;
+    // if (data.logical == -1)
+    //     return 1;
+    // if (data.logical == 1)
+    //     return 0;
     return 0;
 }

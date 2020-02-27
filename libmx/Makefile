@@ -69,6 +69,8 @@ SRC = ./mx_atoi.c \
 		./mx_strtrim.c \
 		./mx_swap_char.c \
 		./mx_strchr.c \
+		./mx_del_list.c \
+		./mx_get_world_by_char.c \
 
 SRCS = ./src/mx_atoi.c \
 		./src/mx_count_char.c \
@@ -135,6 +137,8 @@ SRCS = ./src/mx_atoi.c \
 		./src/mx_strtrim.c \
 		./src/mx_swap_char.c \
 		./src/mx_strchr.c \
+		./src/mx_del_list.c \
+		./src/mx_get_world_by_char.c \
 
 OBJ = ./mx_atoi.o \
 		./mx_count_char.o \
@@ -201,6 +205,8 @@ OBJ = ./mx_atoi.o \
 		./mx_strtrim.o \
 		./mx_swap_char.o \
 		./mx_strchr.o \
+		./mx_del_list.o \
+		./mx_get_world_by_char.o \
 
 OBJO = ./obj/mx_atoi.o \
 		./obj/mx_count_char.o \
@@ -267,6 +273,8 @@ OBJO = ./obj/mx_atoi.o \
 		./obj/mx_strtrim.o \
 		./obj/mx_swap_char.o \
 		./obj/mx_strchr.o \
+		./obj/mx_del_list.o \
+		./obj/mx_get_world_by_char.o \
 
 CFLGS = -g -std=c11 -Wall -Wextra -Wpedantic -Werror 
 

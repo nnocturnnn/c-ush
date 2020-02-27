@@ -191,6 +191,10 @@ static char **mx_parse_input(char *input, t_ush data, char ***env) {
     }
     for (int k = 0; commands[k] != NULL; k++){
         commands[k] = strdup(mx_strtrim(commands[k]));
+        if (mx_strlen(commands[k]) == 1 && commands[k][0] == '\\') {
+            mx_printstr("ush: \\ not closen \n");
+            commands[k] = NULL;
+        }
     }
 
     return commands;
@@ -215,7 +219,6 @@ char **mx_get_input(char **input, t_ush data, char ***env) {
     *(*input + i) = '\0';
     if (!ret) {
 		free(*input);
-        mx_printstr("1");
 		mx_exit_shell(*(env));
 	}
     parse_input = mx_parse_input(*input, data, env);
