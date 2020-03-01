@@ -28,7 +28,7 @@ int mx_unsetenv_builtin(char **arg, char ***env) {
 	i = -1;
 	while (arg[++i]) {
 		var_pos = mx_find_env_var(arg[i], *(env));
-		if (env[var_pos])
+		if (*(*env + var_pos))
 			*(env) = mx_remove_env_var(arg[i], *(env));
 	}
 	return 1;

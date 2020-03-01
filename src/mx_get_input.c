@@ -29,7 +29,7 @@ static char *check_alias(char *input, t_ush data){
     int i = -1;
 
     while(data.alias[++i]) {
-        if ((mx_get_substr_index(input,*mx_strsplit(data.alias[i],'='))) >= 0) {
+        if ((mx_get_substr_index(input,*mx_strsplit(data.alias[i],'='))) == 0) {
             input = mx_replace_substr(input,mx_strdup(*mx_strsplit(data.alias[i],'=')),
             mx_get_env_var(mx_strdup(*mx_strsplit(data.alias[i],'=')), data.alias));
         }
@@ -117,16 +117,13 @@ bool mx_check_substitutions(char *command) {
 int mx_checkclosequots(char *input){
     int result = 0;
     if (!(result = mx_check_quotes(input))){
-        fprintf(stderr, "%s: syntax error: missing terminating character\n", 
-        "ush");
+        mx_printerr("ush: syntax error: missing terminating character\n");
     }
     else if (!(result = mx_check_brackets(input))) {
-        fprintf(stderr, "%s: syntax error: missing brace character\n", 
-        "ush");
+        mx_printerr("ush: syntax error: missing brace character\n");
     }
     else if (!(result = mx_check_substitutions(input))) {
-        fprintf(stderr, "%s: syntax error: missing subsitution character\n", 
-        "ush");
+        mx_printerr("ush: syntax error: missing subsitution character\n");
     }
     return result;
 }

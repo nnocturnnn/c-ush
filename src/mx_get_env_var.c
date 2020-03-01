@@ -7,9 +7,8 @@ char **realloc_envv(int new_size, char **env) {
 
 	while (env[++i] && i < new_size) {
 		new[i] = strdup(env[i]);
-		// free(env[i]);
+		free(env[i]);
 	}
-	free(env);
 	return new;
 }
 

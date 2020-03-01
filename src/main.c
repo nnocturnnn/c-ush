@@ -112,6 +112,10 @@ static int exec_commands(t_ush data, char ***env) {
     char **command;
 
     while (data.commands[++i]) {
+        if (mx_isemptystr(data.commands[i], 1)) {
+            free(data.commands[i]);
+            continue;
+        }
         command = mx_interpretate(data.commands[i]);
         mx_run_command(command, data, env, 1);
     }
