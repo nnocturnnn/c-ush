@@ -196,7 +196,6 @@ static char **mx_parse_input(char *input, t_ush data, char ***env) {
             commands[k] = NULL;
         }
     }
-
     return commands;
 }
 

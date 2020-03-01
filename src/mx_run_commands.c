@@ -36,8 +36,8 @@ static int is_exec(char *bin_path, struct stat f, char **command, char **env) {
 static int check_builtins(char **command, t_ush data, char ***env) {
 	if (mx_strequ(command[0], "exit"))
 		return (mx_exit_builtin(command + 1));
-	// else if (mx_strequ(command[0], "echo"))
-	// 	return (mx_echo_builtin(command + 1, data));
+	else if (mx_strequ(command[0], "echo"))
+		return (mx_echo_builtin(command , data));
     else if (mx_strequ(command[0], "alias"))
         return (mx_alias(command + 1, data.alias, *env));
 	else if (mx_strequ(command[0], "cd"))
@@ -50,9 +50,16 @@ static int check_builtins(char **command, t_ush data, char ***env) {
         return (mx_which_builtin(command + 1, *env));
     else if (mx_strequ(command[0], "pwd"))
         return (mx_pwd_builtin(command + 1, *env));
-    else if (mx_strequ(command[0], "env")) {
+    else if (mx_strequ(command[0], "env")) 
 		return (mx_env_builtin(command + 1, data, *(env)));
-    }
+    // else if (mx_strequ(command[0], "True"))
+    //     return 1;
+    // else if (mx_strequ(command[0], "False"))
+    //     return 0;
+    // else if (mx_strequ(command[0], "bye"))
+    //     return b;
+    // else if (mx_strequ(command[0],"return"))
+    // else if (mx_strequ(command[0], "unalias"))
 	return 0;
 }
 
@@ -82,7 +89,6 @@ int mx_run_command(char **commands, t_ush data, char ***env, int run_mode) {
     struct stat f;
     int is_builtin;
 
-    // mx_print_env(commands);
     if (!env) {
         if ((is_builtin = check_builtins(commands, data, env)) == 1)
             return 0;

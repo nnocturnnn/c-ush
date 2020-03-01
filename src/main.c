@@ -121,7 +121,7 @@ static int exec_commands(t_ush data, char ***env) {
 static t_ush *init(int argc, char **argv) {
     t_ush *data = malloc(sizeof(t_ush));
     char **var = (char **)malloc(sizeof(char *) * 100);//arr variable
-   	char **alias = (char **)malloc(sizeof(char *) * 100);//arr alias
+   	char **alias = (char **)malloc(sizeof(char *) * 1000);//arr alias
    	char **commands = (char **)malloc(sizeof(char *) * 100);//arr commands
 
     data->logical = 0; // -1 &&    1 ||

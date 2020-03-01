@@ -93,5 +93,6 @@ int mx_unsetenv_builtin(char **arg, char ***env);
 int	mx_isinenv(char **env, char *var);
 char **mx_remove_env_var(char *name_var, char **env);
 int mx_exit_builtin(char **arg);
+int mx_echo_builtin(char **str, t_ush data);
 
 #endif 
