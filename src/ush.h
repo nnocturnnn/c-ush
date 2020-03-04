@@ -59,6 +59,11 @@ typedef struct s_ush {
 struct termios stored_settings;
 
 int mx_exit_builtin(char **arg);
+void mx_set_var(char *key, char *value, char **var);
+int bye_builtin(char **command);
+int false_builtin(char **var);
+int true_builtin(char **var);
+int return_builtin(char **var, char **arg);
 void set_input_mode (void);
 void key_handler(t_ush data);
 int envv_len(char **envv);

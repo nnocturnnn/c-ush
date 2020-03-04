@@ -178,6 +178,46 @@ char **mx_split_commands(char *command) {
     return cmds;
 }
 
+void mx_set_var(char *key, char *value, char **var) {
+	int	pos = mx_find_env_var(key, var);
+	char *tmp = mx_strjoin("=", value);
+
+	if (var[pos]) {
+		free(var[pos]);
+		if (value)
+			var[pos] = mx_strjoin(key, tmp);
+		else
+			var[pos] = mx_strjoin(key, "=");
+	} else {
+		if (value)
+			var[pos] = mx_strjoin(key, tmp);
+		else
+			var[pos] = mx_strjoin(key, "=");
+	}
+	free(tmp);
+}
+
+static char *mx_get_var_input(char *input, char **var) {
+    int i = -1;
+    int c = -1;
+    char **commands = mx_strsplit(input,' ');
+    char *variable;
+
+    while (commands[++i]) 
+        if (mx_get_char_index(commands[i],'=') == -1) {
+            while (commands[++c] && mx_get_char_index(commands[c],'=') != -1) {
+                input = mx_replace_substr(input,get_word_by_char(commands[c],'='),"");
+            }
+            return input;
+        }
+    while (commands[++c]){
+        mx_set_var(*mx_strsplit(commands[c],'='),*(mx_strsplit(commands[c],'=') + 1),var);
+        input = mx_replace_substr(input,get_word_by_char(commands[c],'='),"");
+    }
+    mx_print_env(var);
+    return input;
+}
+
 static char **mx_parse_input(char *input, t_ush data, char ***env) {
     char *rep = check_alias(mx_replace_substr(input, "&&", ";"),data);
     char *nah_tild = mx_replace_substr(rep,"~",mx_get_env_var("HOME", *(env)));
@@ -187,7 +227,8 @@ static char **mx_parse_input(char *input, t_ush data, char ***env) {
         commands[0] = NULL;
     }
     for (int k = 0; commands[k] != NULL; k++){
-        commands[k] = strdup(mx_strtrim(commands[k]));
+        commands[k] = strdup(mx_strtrim(mx_get_var_input(commands[k],data.var)));
+        
         if (mx_strlen(commands[k]) == 1 && commands[k][0] == '\\') {
             mx_printstr("ush: \\ not closen \n");
             commands[k] = NULL;
@@ -207,7 +248,6 @@ char **mx_get_input(char **input, t_ush data, char ***env) {
 
     *input = mx_strnew(1);
     while ((ret = read(0, &b, 1)) && b != '\n') { 
-        // mx_printchar(b);
         *(*input + i++) = b;
 		*input = mx_realloc(*input, count + 1);
 		count++;

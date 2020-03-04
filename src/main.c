@@ -132,6 +132,7 @@ static t_ush *init(int argc, char **argv) {
     data->var = var;
     data->alias = alias;
     data->commands = commands;
+    data->var[0] = strdup("?=0");
     return data;
 }
 

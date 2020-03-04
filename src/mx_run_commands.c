@@ -34,32 +34,35 @@ static int is_exec(char *bin_path, struct stat f, char **command, char **env) {
 
 
 static int check_builtins(char **command, t_ush data, char ***env) {
-	if (mx_strequ(command[0], "exit"))
+	if (!mx_get_substr_index(command[0], "exit"))
 		return (mx_exit_builtin(command + 1));
-	else if (mx_strequ(command[0], "echo"))
+	else if (!mx_get_substr_index(command[0],"fg"))
+		return 1;
+	else if (!mx_get_substr_index(command[0], "echo"))
 		return (mx_echo_builtin(command , data));
-    else if (mx_strequ(command[0], "alias"))
+    else if (!mx_get_substr_index(command[0], "alias"))
         return (mx_alias(command + 1, data.alias, *env));
-	else if (mx_strequ(command[0], "cd"))
+	else if (!mx_get_substr_index(command[0], "cd"))
 		return (mx_cd_builtin(command + 1, *env));
-	else if (mx_strequ(command[0], "export"))
+	else if (!mx_get_substr_index(command[0], "export"))
 		return (mx_export_builtin(command + 1, data, env));
-	else if (mx_strequ(command[0], "unset"))
+	else if (!mx_get_substr_index(command[0], "unset"))
 		return (mx_unsetenv_builtin(command + 1, env));
-    else if (mx_strequ(command[0], "which"))
+    else if (!mx_get_substr_index(command[0], "which"))
         return (mx_which_builtin(command + 1, *env));
-    else if (mx_strequ(command[0], "pwd"))
+    else if (!mx_get_substr_index(command[0], "pwd"))
         return (mx_pwd_builtin(command + 1, *env));
-    else if (mx_strequ(command[0], "env")) 
+    else if (!mx_get_substr_index(command[0], "env")) 
 		return (mx_env_builtin(command + 1, data, *(env)));
-    // else if (mx_strequ(command[0], "True"))
-    //     return 1;
-    // else if (mx_strequ(command[0], "False"))
-    //     return 0;
-    // else if (mx_strequ(command[0], "bye"))
-    //     return b;
-    // else if (mx_strequ(command[0],"return"))
-    // else if (mx_strequ(command[0], "unalias"))
+    else if (!mx_get_substr_index(command[0], "True"))
+        return true_builtin(data.var) ;
+    else if (!mx_get_substr_index(command[0], "False"))
+        return false_builtin(data.var);
+    else if (!mx_get_substr_index(command[0], "bye"))
+        return bye_builtin(command);
+    else if (!mx_get_substr_index(command[0],"return"))
+		return return_builtin(data.var, command + 1);
+    // else if (!mx_get_substr_index(command[0], "unalias"))
 	return 0;
 }
 
