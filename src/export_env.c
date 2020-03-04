@@ -32,7 +32,7 @@ void mx_set_env_var(char *key, char *value, char ***env) {
 		else
 			*(*env + pos) = mx_strjoin(key, "=");
 	}
-	//free(tmp);
+	free(tmp);
 }
 
 int mx_export_builtin(char **arg, t_ush data, char ***env) {

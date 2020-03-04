@@ -24,7 +24,7 @@
 #include <termios.h>
 #include "../libmx/inc/libmx.h"
 
-enum m_eror{
+enum e_eror{
     UNSET_ERR,
     USH_NF,
     USH_PERMISION,
@@ -49,15 +49,8 @@ typedef struct s_ush {
 } t_ush;
 
 #define MX_OK 00
-#define MX_UP_AR "\x1b\x5b\x41"
-#define MX_DOWN_AR "\x1b\x5b\x42"
-#define MX_RIGHT_AR "\x1b\x5b\x43"
-#define MX_LEFT_AR "\x1b\x5b\x44"
-#define MX_MOVE_CURSOR_LEFT "\033[1C"
-#define MX_MOVE_CURSOR_RIGHT "\033[1D"
 
-struct termios stored_settings;
-
+int check_builtins(char **command, t_ush data, char ***env);
 int mx_exit_builtin(char **arg);
 void mx_set_var(char *key, char *value, char **var);
 int bye_builtin(char **command);

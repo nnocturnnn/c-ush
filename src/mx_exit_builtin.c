@@ -12,7 +12,7 @@ int mx_exit_builtin(char **arg) {
         }
         else {
             mx_errors(ERR_NAR,arg[0]);
-            exit(1);
+            exit(255);
         }
     }
     else

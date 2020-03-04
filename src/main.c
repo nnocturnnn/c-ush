@@ -117,7 +117,9 @@ static int exec_commands(t_ush data, char ***env) {
             continue;
         }
         command = mx_interpretate(data.commands[i]);
-        mx_run_command(command, data, env, 1);
+        exit = mx_run_command(command, data, env, 1);
+        if (exit == -1)
+            break;
     }
     return exit;
 }
@@ -149,9 +151,9 @@ static void circle_main(char **env, t_ush data) {
             free(input);
             continue;
         }
-        //free(input);
+        free(input);
         ret = exec_commands(data, &env);
-        // free(&commands);
+        free(data.commands);
         if (ret == -1) 
             break;
 	}

@@ -1,6 +1,6 @@
 #include "ush.h"
 
-void mx_errors(enum m_eror errors, char *a) {
+void mx_errors(enum e_eror errors, char *a) {
     if (errors == UNSET_ERR) {
         mx_printerr("unset: not enough arguments\n");
     } else if (errors == USH_NF) {
