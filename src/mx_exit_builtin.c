@@ -8,14 +8,12 @@ int mx_exit_builtin(char **arg) {
                 ee = 0;
         if (ee == 1){
         int ext = mx_atoi(arg[0]);
-        exit(ext);
+        return ext;
         }
         else {
             mx_errors(ERR_NAR,arg[0]);
             exit(255);
         }
     }
-    else
-        exit(0);
     return -1;
 }

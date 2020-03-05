@@ -22,18 +22,17 @@ int envv_len(char **envv) {
 }
 
 char *mx_get_env_var(char *var, char **env) {
-    char *tmp;
+    char *tmp = mx_strjoin(var, "=");
     int i = -1;
     
     if(!env)
         return NULL;
     while (env[++i]) {
-        tmp = mx_strjoin(var, "=");
-        if ((mx_get_substr_index(env[i], tmp)) == 0) {
-            free(tmp);
+        if (!(mx_get_substr_index(env[i], tmp))) {
+            mx_strdel(&tmp);
             return (mx_strchr(env[i], '=') + 1);
         }
-        free(tmp);
     }
+    mx_strdel(&tmp);
     return NULL;
 }

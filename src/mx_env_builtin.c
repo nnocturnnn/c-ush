@@ -2,12 +2,14 @@
 
 
 static int p_env_arg(char **arg, char **env, t_ush data) {
-    if (!arg[0])
+    if (!arg[0]) {
         mx_errors(ENV_OPTION_REQ, arg[0]);
-    else {
-        if (!arg[1])
+        return 1;
+    } else {
+        if (!arg[1]) {
             mx_print_env(env);
-        else {
+            return 0;
+        } else {
             env = mx_remove_env_var(arg[1], env);
             return mx_run_command(arg + 1, data, &env, 0);
         }
@@ -16,13 +18,15 @@ static int p_env_arg(char **arg, char **env, t_ush data) {
 }
 
 static int u_env_arg(char **arg, char **env, t_ush data) {
-    if (!arg[0])
+    if (!arg[0]) {
         mx_errors(ENV_OPTION_REQ, arg[0]);
-    else {
+        return 1;
+    } else {
         env = mx_remove_env_var(arg[1], env);
-        if (!arg[1]) 
+        if (!arg[1]) {
             mx_print_env(env);
-        else 
+            return 0;
+        } else 
             return mx_run_command(arg + 1, data, &env, 0);
     }
     return 1;
@@ -34,7 +38,7 @@ int mx_env_builtin(char **arg, t_ush data, char **env) {
 
     if (!arg[0]) {
         mx_print_env(env);
-        return 1;
+        return 0;
     }
     if (mx_strequ(arg[0], "-P"))
         return p_env_arg(arg + 1, new_env, data);
@@ -42,12 +46,13 @@ int mx_env_builtin(char **arg, t_ush data, char **env) {
         return u_env_arg(arg + 1, new_env, data);
     else {
         if (mx_strequ(arg[0], "-i") && !arg[1])
-            return 1;
+            return 0;
         else if (mx_strequ(arg[0], "-i")) {
             return mx_run_command(arg + 1, data, NULL, i);
         }
         else
             mx_errors(ENV_ILL,arg[0]);
+            return 1;
     }
-    return 1;
+    return 0;
 }

@@ -88,7 +88,7 @@ int mx_echo_builtin(char **str, t_ush data) {
     else {
         print_e(i, flags, str);
     }
-    free(flags);
-    return 1;
+    mx_strdel(&flags);
+    return 0;
 }
 

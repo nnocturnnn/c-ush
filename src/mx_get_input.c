@@ -201,7 +201,6 @@ static char *mx_get_var_input(char *input, char **var) {
     int i = -1;
     int c = -1;
     char **commands = mx_strsplit(input,' ');
-    char *variable;
 
     while (commands[++i]) 
         if (mx_get_char_index(commands[i],'=') == -1) {
@@ -214,7 +213,7 @@ static char *mx_get_var_input(char *input, char **var) {
         mx_set_var(*mx_strsplit(commands[c],'='),*(mx_strsplit(commands[c],'=') + 1),var);
         input = mx_replace_substr(input,get_word_by_char(commands[c],'='),"");
     }
-    mx_print_env(var);
+    mx_del_strarr(&commands);
     return input;
 }
 
@@ -234,6 +233,8 @@ static char **mx_parse_input(char *input, t_ush data, char ***env) {
             commands[k] = NULL;
         }
     }
+    mx_strdel(&rep);
+    mx_strdel(&nah_tild);
     return commands;
 }
 
@@ -254,7 +255,6 @@ char **mx_get_input(char **input, t_ush data, char ***env) {
     }
     *(*input + i) = '\0';
     if (!ret) {
-		free(*input);
 		mx_exit_shell(*(env));
 	}
     parse_input = mx_parse_input(*input, data, env);

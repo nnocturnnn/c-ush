@@ -9,13 +9,10 @@ static int run_cmd(char *path, char **args, char **env) {
 	if (pid == 0)
 		execve(path, args, env);
 	else if (pid < 0) {
-		free(path);
         mx_errors(FORK_FAIL, "crash (");
 		return -1;
 	}
 	wait(&pid);
-	if (path)
-		free(path);
 	return 1;
 }
 
@@ -42,13 +39,13 @@ static int check_bins(char **commands, char **env) {
         else 
             bin_path = mx_pathjoin(path[i], commands[0]);
         if (lstat(bin_path, &f) == -1)
-			free(bin_path);
+			mx_strdel(&bin_path);
 		else {
-			free(path);
+			mx_del_strarr(&path);
 			return (is_exec(bin_path, f, commands, env));
 		}
 	}
-	free(path);
+	mx_del_strarr(&path);
 	return 0;
 }
 
@@ -64,8 +61,8 @@ int mx_run_command(char **commands, t_ush data, char ***env, int run_mode) {
             || check_bins(commands, *env) )
             return 0;
     }
-    if (is_builtin < 0)
-        return -1;
+    if (is_builtin != 1 && is_builtin != 0)
+        return is_builtin;
     mx_errors(USH_NF, commands[0]);
     // if (data.logical == -1)
     //     return 1;

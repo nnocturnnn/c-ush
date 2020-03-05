@@ -7,11 +7,15 @@ int mx_alias(char **arg, char **data, char **env) {
         mx_print_env(data);
     } else {
         while(arg[++i]) {
-            mx_set_var(*mx_strsplit(arg[i],'='),*(mx_strsplit(arg[i],'=') + 1),
-                        data);
+            if (mx_get_char_index(arg[i], '=') == 0 && mx_strlen(arg[i]) == 1){
+                mx_errors(USH_BAD_ASSIGN, ":(");
+                return 1;
+            } else 
+                mx_set_var(*mx_strsplit(arg[i],'='),
+                           *(mx_strsplit(arg[i],'=') + 1),data);
         }
     }
-    return 1;
+    return 0;
 }
 
 int mx_unalias(char **arg, char **data, char **env) {

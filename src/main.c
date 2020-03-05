@@ -113,14 +113,14 @@ static int exec_commands(t_ush data, char ***env) {
 
     while (data.commands[++i]) {
         if (mx_isemptystr(data.commands[i], 1)) {
-            free(data.commands[i]);
             continue;
         }
         command = mx_interpretate(data.commands[i]);
         exit = mx_run_command(command, data, env, 1);
-        if (exit == -1)
+        if (exit != 1 && exit != 0)
             break;
     }
+    mx_del_strarr(&command);
     return exit;
 }
 
@@ -138,7 +138,7 @@ static t_ush *init(int argc, char **argv) {
     return data;
 }
 
-static void circle_main(char **env, t_ush data) {
+static int circle_main(char **env, t_ush data) {
     char *input;
     int ret;
 
@@ -148,25 +148,26 @@ static void circle_main(char **env, t_ush data) {
             mx_display(env);
         data.commands = mx_get_input(&input, data, &env);
         if (mx_isemptystr(input, 1)) {
-            free(input);
             continue;
         }
         free(input);
         ret = exec_commands(data, &env);
-        free(data.commands);
-        if (ret == -1) 
+        if (ret != 0 && ret != 1) 
             break;
 	}
+    return ret;
 }
 
 int main(int argc, char **argv, char **envr) {
     char **env;
+    int q;
 
     // set_input_mode();
     env = mx_init_envr(argc, argv, envr);
     t_ush *data = init(argc, argv);
-    circle_main(env, *data);
-    // free(&env);
+    free(data);
+    q = circle_main(env, *data);
+    mx_del_strarr(&env);
     // mx_reset_input_mode();
-    exit(1);
+    exit(q);
 }

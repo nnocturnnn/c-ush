@@ -12,7 +12,7 @@ void mx_display(char **env) {
     else {
         mx_printstr("\033[0;32m");
         mx_printstr(parsed_cwd);
-        free(parsed_cwd);
+        mx_strdel(&parsed_cwd);
         mx_printstr(" u$h> \033[0m ");
     }
 }
