@@ -5,11 +5,11 @@ char **mx_remove_env_var(char *name_var, char **env) {
     int i = var_pos;
     int var_count;
 
-    free(env[var_pos]);
+    mx_strdel(&env[var_pos]);
 	var_count = var_pos + 1;
 	while (env[i + 1]) {
 		env[i] = strdup(env[i + 1]);
-		free(env[i + 1]);
+		mx_strdel(&env[i + 1]);
 		i++;
 		var_count++;
 	}

@@ -50,6 +50,7 @@ typedef struct s_ush {
 
 #define MX_OK 00
 
+int mx_unalias(char **arg, char **data, char **env);
 int check_builtins(char **command, t_ush data, char ***env);
 int mx_exit_builtin(char **arg);
 void mx_set_var(char *key, char *value, char **var);

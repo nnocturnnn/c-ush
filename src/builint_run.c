@@ -55,8 +55,11 @@ static int check_b3(char **command, t_ush data, char ***env){
 		return 1;
 	} else if (!mx_get_substr_index(command[0],"return"))
 		return return_builtin(data.var, command + 1);
-    // else if (!mx_get_substr_index(command[0], "unalias"))
-    else if (!mx_get_substr_index(command[0],"set")) {
+    else if (!mx_get_substr_index(command[0], "unalias")) {
+        mx_set_var("?",mx_itoa(mx_unalias(command + 1, data.alias, *env)),
+                   data.var);
+        return 1;
+    } else if (!mx_get_substr_index(command[0],"set")) {
         mx_print_env(data.var);
         return 1;
     } else

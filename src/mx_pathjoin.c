@@ -20,8 +20,7 @@ char *mx_pathjoin(char *p1, char *p2) {
 		if (p2[0] == '/')
 			return (mx_strjoin(p1, p2));
 		else {
-			tmp2 = mx_strjoin(mx_strjoin(p1, "/"), p2);
-			return (tmp2);
+			return mx_strjoin(mx_strjoin(p1, "/"), p2);
 		}
 	}
 	else {

@@ -152,6 +152,7 @@ static int circle_main(char **env, t_ush data) {
         }
         free(input);
         ret = exec_commands(data, &env);
+        // mx_print_env(env);
         if (ret != 0 && ret != 1) 
             break;
 	}
