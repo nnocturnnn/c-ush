@@ -48,7 +48,7 @@ static char *checkflags(char **str, int *counter) {
             return flags;
         for (int n = 1; str[i][n] != '\0'; n++)
             if (str[i][n] != 'n' && str[i][n] != 'e' && str[i][n] != 'E')
-                return flags;
+                            return flags;
         *counter = i;
         for (int n = 1; str[i][n]; n++) {
             if (str[i][n] == 'n')

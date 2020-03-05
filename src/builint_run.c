@@ -70,9 +70,9 @@ static char **getvars(char *nah_tild) {
     const char h = ' ';
     char **vars = (char **)malloc(sizeof(char *) * (mx_count_words(nah_tild, h)) + 5);
     int counter = 0;
-
+    
     for (int i = 0; i < strlen(nah_tild); i++) {
-        if (nah_tild[i] == '$') {
+        if (nah_tild[i] == '$' && nah_tild[i + 1] != '(') {
             int arr[2];
 
             arr[0] = i;
