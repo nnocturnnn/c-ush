@@ -65,7 +65,7 @@ static void print_e(int i, char *flags, char **str) {
 
     for (i = i + 1; str[i]; i++) {
         error = print_echo_e(str[i]);
-        if (str[i + 1] && error)
+        if (str[i + 1] && error && mx_strlen(str[i]))
             write(1, " ", 1);
     }
     if (flags[0] != 'n' && error)
@@ -79,7 +79,7 @@ int mx_echo_builtin(char **str, t_ush data) {
     if (flags[1] == 'E') {
         for (i = i + 1; str[i]; i++) {
             write(1, str[i], mx_strlen(str[i]));
-            if (str[i + 1])
+            if (str[i + 1] && mx_strlen(str[i]))
                 write(1, " ", 1);
         }
         if (flags[0] != 'n')

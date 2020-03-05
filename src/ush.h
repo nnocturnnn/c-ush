@@ -1,28 +1,28 @@
 #ifndef USH_H 
 #define USH_H
 
-// #include <stdio.h>
-// #include <signal.h>
-// #include <wchar.h>
-// #include <errno.h>
-// #include <fcntl.h>
-// #include <string.h>
-// #include <malloc/malloc.h>
-// #include <stdlib.h>
-// #include <stdbool.h>
-// #include <unistd.h>
-// #include <dirent.h>
-// #include <sys/ioctl.h>
-// #include <sys/acl.h>
-// #include <sys/types.h> 
-// #include <sys/stat.h>
-// #include <pwd.h>
-// #include <grp.h>
-// #include <sys/acl.h>
-// #include <sys/xattr.h>
-// #include <time.h>
-// #include <termios.h>
-// #include "../libmx/inc/libmx.h"
+#include <stdio.h>
+#include <signal.h>
+#include <wchar.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <string.h>
+#include <malloc/malloc.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include <dirent.h>
+#include <sys/ioctl.h>
+#include <sys/acl.h>
+#include <sys/types.h> 
+#include <sys/stat.h>
+#include <pwd.h>
+#include <grp.h>
+#include <sys/acl.h>
+#include <sys/xattr.h>
+#include <time.h>
+#include <termios.h>
+#include "../libmx/inc/libmx.h"
 
 enum e_eror{
     UNSET_ERR,
