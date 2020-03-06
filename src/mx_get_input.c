@@ -217,9 +217,26 @@ static char *mx_get_var_input(char *input, char **var) {
     return input;
 }
 
+char *replace_tild(char *rep, char **env, int *i) {
+    if (mx_get_char_index(rep, '~') < 0)
+        return rep;
+    int it = mx_get_char_index(rep, '~');
+
+    i++;
+    rep = mx_replace_substr(rep, "~+", mx_get_env_var("PWD", env));
+    rep = mx_replace_substr(rep,"~-",mx_get_env_var("OLDPWD", env));
+    if(rep[it + 1] == ' ' || rep[it + 1] == '\0' || rep[it + 1] == '/')
+        rep = mx_replace_substr(rep, "~", mx_get_env_var("HOME", env));
+    else
+        rep = mx_replace_substr(rep, "~", "/Users/");
+
+    return rep;
+}
+
 static char **mx_parse_input(char *input, t_ush data, char ***env) {
-    char *rep = check_alias(mx_replace_substr(input, "&&", ";"),data);
-    char *nah_tild = mx_replace_substr(rep,"~",mx_get_env_var("HOME", *(env)));
+    int codetilda = 0;
+    char *rep = check_alias(mx_replace_substr(input, "&&", ";"), data);
+    char *nah_tild = replace_tild(rep, *env, &codetilda);
     char **commands = mx_split_commands(nah_tild);
     
     if (!(mx_checkclosequots(input))){
@@ -234,7 +251,8 @@ static char **mx_parse_input(char *input, t_ush data, char ***env) {
         }
     }
     mx_strdel(&rep);
-    mx_strdel(&nah_tild);
+    if (codetilda)
+        mx_strdel(&nah_tild);
     return commands;
 }
 
