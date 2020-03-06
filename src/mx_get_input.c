@@ -233,15 +233,27 @@ char *replace_tild(char *rep, char **env, int *i) {
     return rep;
 }
 
+int mx_checkdotkoma(char *input) {
+    int t = 0;
+
+    for (int h = 0; input[h] != '\0'; h++)
+        if (input[h] == ';' && input[h + 1] == ';')
+            t++;
+    if (t) {
+        mx_printerr("ush: parse error near `;;'\n");
+        return t;
+    }
+    return t;
+}
+
 static char **mx_parse_input(char *input, t_ush data, char ***env) {
     int codetilda = 0;
     char *rep = check_alias(mx_replace_substr(input, "&&", ";"), data);
     char *nah_tild = replace_tild(rep, *env, &codetilda);
     char **commands = mx_split_commands(nah_tild);
-    
-    if (!(mx_checkclosequots(input))){
+
+    if (!(mx_checkclosequots(input)) || (mx_checkdotkoma(input)))
         commands[0] = NULL;
-    }
     for (int k = 0; commands[k] != NULL; k++){
         commands[k] = strdup(mx_strtrim(mx_get_var_input(commands[k],data.var)));
         

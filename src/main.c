@@ -2,7 +2,7 @@
 
 void signal_handler(int signo) {
 	if (signo == SIGINT) {
-		mx_printstr("\n");
+		mx_printstr("ls\n");
 		signal(SIGINT, signal_handler);
 	} else if (signo == EOF) {
         mx_printstr("\n");
