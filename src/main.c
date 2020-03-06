@@ -5,7 +5,7 @@ void signal_handler(int signo) {
 
     if (signo == SIGINT) {
 		mx_printstr("\n");
-        mx_display(environ);
+        // mx_display(environ);
         signal(SIGINT, signal_handler);
     } else if (signo == EOF) {
         mx_printstr("\n");
@@ -103,10 +103,18 @@ static char **get_result(char *command) {
     return result;
 }
 
+char **replace_on_koskav(char **shit);
+
 char **mx_interpretate(char *command) {
     if (!strlen(command))
         return NULL;
-    return get_result(command);
+    return replace_on_koskav(get_result(command));
+}
+
+char **replace_on_koskav(char **shit) {
+    if (mx_strcmp(shit[0], "echo") == 0 && shit[1][0] == '`' && shit[1][strlen(shit[1]) - 1] == '`' && shit[2] == NULL)
+        return mx_interpretate(strndup(++shit[1], strlen(shit[1]) - 1));
+    return shit;
 }
 
 static int exec_commands(t_ush data, char ***env) {

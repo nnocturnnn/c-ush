@@ -31,9 +31,10 @@ static int print_echo_e(char *str) {
         else if ((buf = print_echo_d(&str[i], &i)) != -1);
         else if (str[i] == '\\' && str[i + 1] == 'c' && ++i > 0)
             return 0;
-        else
+        else if (str[i] != '\\')
             buf = str[i];
-        write(1, &buf, 1);
+        if (str[i] != '\\' || (str[i] == '\\' && str[i + 1] == '\\'))
+            write(1, &buf, 1);
     }
     return 1;
 }
