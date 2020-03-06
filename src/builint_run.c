@@ -72,7 +72,7 @@ static char **getvars(char *nah_tild) {
     int counter = 0;
     
     for (int i = 0; i < strlen(nah_tild); i++) {
-        if (nah_tild[i] == '$' && nah_tild[i + 1] != '(') {
+        if (nah_tild[i] == '$' && nah_tild[i + 1] != '(' && nah_tild[i + 1] != ' '  && nah_tild[i + 1] != '\0') {
             int arr[2];
 
             arr[0] = i;
