@@ -103,6 +103,8 @@ static char **get_result(char *command) {
     return result;
 }
 
+
+
 char **replace_on_koskav(char **shit);
 
 char **mx_interpretate(char *command) {
@@ -112,7 +114,7 @@ char **mx_interpretate(char *command) {
 }
 
 char **replace_on_koskav(char **shit) {
-    if (mx_strcmp("echo", shit[0]) == 0 && shit[1][0] == '`' && shit[1][strlen(shit[1]) - 1] == '`' && shit[2] == NULL)
+    if (mx_strcmp("echo", shit[0]) == 0 && shit[1] != NULL && shit[1][0] == '`' && shit[1][strlen(shit[1]) - 1] == '`' && shit[2] == NULL)
         return mx_interpretate(strndup(++shit[1], strlen(shit[1]) - 1));
     return shit;
 }
