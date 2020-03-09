@@ -1,13 +1,10 @@
 #include "ush.h"
 
 void signal_handler(int signo) {
-    extern char **environ;
-
-    if (signo == SIGINT) {
+	if (signo == SIGINT) {
 		mx_printstr("\n");
-        // mx_display(environ);
-        signal(SIGINT, signal_handler);
-    } else if (signo == EOF) {
+		signal(SIGINT, signal_handler);
+	} else if (signo == EOF) {
         mx_printstr("\n");
 		signal(EOF, signal_handler);
     } else if (signo == SIGTSTP) {
@@ -103,20 +100,17 @@ static char **get_result(char *command) {
     return result;
 }
 
-
-
-char **replace_on_koskav(char **shit);
+char **replace_on_koskav(char **shit) {
+    if (mx_strcmp("echo", shit[0]) == 0 && shit[1] != NULL && shit[1][0] == '`' 
+        && shit[1][strlen(shit[1]) - 1] == '`' && shit[2] == NULL)
+        return mx_interpretate(strndup(++shit[1], strlen(shit[1]) - 1));
+    return shit;
+}
 
 char **mx_interpretate(char *command) {
     if (!strlen(command))
         return NULL;
     return replace_on_koskav(get_result(command));
-}
-
-char **replace_on_koskav(char **shit) {
-    if (mx_strcmp("echo", shit[0]) == 0 && shit[1] != NULL && shit[1][0] == '`' && shit[1][strlen(shit[1]) - 1] == '`' && shit[2] == NULL)
-        return mx_interpretate(strndup(++shit[1], strlen(shit[1]) - 1));
-    return shit;
 }
 
 static int exec_commands(t_ush data, char ***env) {
@@ -160,12 +154,10 @@ static int circle_main(char **env, t_ush data) {
         if (isatty(0))
             mx_display(env);
         data.commands = mx_get_input(&input, data, &env);
-        if (mx_isemptystr(input, 1)) {
+        if (mx_isemptystr(input, 1))
             continue;
-        }
         free(input);
         ret = exec_commands(data, &env);
-        // mx_print_env(env);
         if (ret != 0 && ret != 1) 
             break;
 	}

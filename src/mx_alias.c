@@ -1,6 +1,6 @@
 #include "ush.h"
 
-int mx_alias(char **arg, char **data, char **env) {
+int mx_alias(char **arg, char **data) {
     int i = -1;
 
     if (!arg[0]) {
@@ -18,15 +18,25 @@ int mx_alias(char **arg, char **data, char **env) {
     return 0;
 }
 
-int mx_unalias(char **arg, char **data, char **env) {
+int mx_unalias(char **arg, char **data) {
     int i = -1;
+    int q = -1;
+    int var_pos;
+    int max;
 
     if (!arg[0]) {
         mx_printerr("unalias: not enough arguments\n");
         return 1;
     }
     while (arg[++i]) {
-        mx_print_env(mx_remove_env_var(arg[i],data));
+        var_pos = mx_find_env_var(arg[i],data);
+        max = envv_len(data) - 1;
+        mx_strdel(&data[var_pos]);
+        while (var_pos < max) {     
+            data[var_pos] = mx_strdup(data[var_pos + 1]);
+            var_pos++;
+        }
+        mx_strdel(&data[var_pos]);
     }
     return 0;
 }

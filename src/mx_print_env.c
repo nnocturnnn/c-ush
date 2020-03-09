@@ -9,10 +9,13 @@ void print_path(char *path, char **env) {
 
 void mx_print_env(char **env) {
     int i = 0;
+    int len = envv_len(env);
     
-    if (env)
-        while (env[i]) {
-            mx_printstr(env[i++]);
+    if (env) {
+        while (i < len){
+            mx_printstr(env[i]);
             mx_printstr("\n");
+            i++;
         }
+    }
 }

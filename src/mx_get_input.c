@@ -285,7 +285,7 @@ char **mx_get_input(char **input, t_ush data, char ***env) {
     }
     *(*input + i) = '\0';
     if (!ret) {
-		mx_exit_shell(*(env));
+		exit(0);
 	}
     parse_input = mx_parse_input(*input, data, env);
     return parse_input;

@@ -50,7 +50,9 @@ typedef struct s_ush {
 
 #define MX_OK 00
 
-int mx_unalias(char **arg, char **data, char **env);
+char **replace_on_koskav(char **shit);
+char **mx_interpretate(char *command);
+int mx_unalias(char **arg, char **data);
 int check_builtins(char **command, t_ush data, char ***env);
 int mx_exit_builtin(char **arg);
 void mx_set_var(char *key, char *value, char **var);
@@ -76,7 +78,7 @@ void signal_handler(int signo);
 void proc_signal_handler(int signo); 
 int mx_run_command(char **commands, t_ush data, char ***env, int run_mode);
 void mx_print_env(char **env);
-int mx_export_builtin(char **arg, t_ush data, char ***env);
+int mx_export_builtin(char **arg, t_ush data, char **env);
 int mx_echo_builtin(char **arg, t_ush data);
 int mx_cd_builtin(char **arg, char **env);
 int mx_change_dir(char *path, int printh_path, char **env);
@@ -87,9 +89,9 @@ int mx_pwd_builtin(char **arg, char **env);
 int mx_which_builtin(char **arg, char **env);
 int mx_env_builtin(char **arg, t_ush data, char **env);
 char **mx_init_export(char **env);
-int mx_alias(char **arg, char **data, char **env);
+int mx_alias(char **arg, char **data);
 void mx_reset_input_mode(void);
-int mx_unsetenv_builtin(char **arg, char ***env);
+int mx_unsetenv_builtin(char **arg, char **data);
 int	mx_isinenv(char **env, char *var);
 char **mx_remove_env_var(char *name_var, char **env);
 int mx_exit_builtin(char **arg);

@@ -53,8 +53,8 @@ int mx_run_command(char **commands, t_ush data, char ***env, int run_mode) {
     struct stat f;
     int is_builtin;
 
-    if (!env) {
-        if ((is_builtin = check_builtins(commands, data, env)) == 1)
+    if (run_mode == 0) {
+        if (check_bins(commands, *env))
             return 0;
     } else if (run_mode == 1) {
         if ((is_builtin = check_builtins(commands, data, env)) == 1 
@@ -64,9 +64,5 @@ int mx_run_command(char **commands, t_ush data, char ***env, int run_mode) {
     if (is_builtin != 1 && is_builtin != 0)
         return is_builtin;
     mx_errors(USH_NF, commands[0]);
-    // if (data.logical == -1)
-    //     return 1;
-    // if (data.logical == 1)
-    //     return 0;
     return 0;
 }

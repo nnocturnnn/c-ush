@@ -1,17 +1,22 @@
 #include "ush.h"
 
 char **mx_init_envr(int argc, char **argv, char **envr) {
-    char **env;
+    char **env = (char **)malloc(sizeof(char *) * 100);
     int i = -1;
+    char buff[4096 + 1];
+    char *cwd = getcwd(buff, 4096);
 
-    (void)argc;
-    (void)argv;
-    env = (char **)malloc(sizeof(char *) * (envv_len(envr) + 1));
     while(envr[++i]) {
         if (!(env[i] = strdup(envr[i])))
-            mx_exit_shell(env);
+            exit(255);
     }
-    mx_set_env_var("SHLVL",mx_itoa(atoi(mx_get_env_var("SHLVL",env)) + 1),&env);
+    if(envr[0] != NULL) {
+        mx_set_var("SHLVL",mx_itoa(atoi(mx_get_env_var("SHLVL",env)) + 1),env);
+     } else {
+        env[0] = strdup("SHLVL=1");
+        env[1] = strdup(mx_strjoin("PWD=",cwd));
+        env[2] = NULL;
+    }
     return env;
 }
 
@@ -21,8 +26,8 @@ char **mx_init_export(char **env) {
 
     while(env[++i]) {
         if (!(export[i] = strdup(env[i])))
-            mx_exit_shell(env);
+            exit(255);
     }
-    mx_quicksort(export, 0, mx_sizearr(export));
+    export[i] = NULL;
     return export;
 }

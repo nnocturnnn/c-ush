@@ -31,10 +31,9 @@ static int print_echo_e(char *str) {
         else if ((buf = print_echo_d(&str[i], &i)) != -1);
         else if (str[i] == '\\' && str[i + 1] == 'c' && ++i > 0)
             return 0;
-        else if (str[i] != '\\')
+        else
             buf = str[i];
-        if (str[i] != '\\' || (str[i] == '\\' && str[i + 1] == '\\'))
-            write(1, &buf, 1);
+        write(1, &buf, 1);
     }
     return 1;
 }
@@ -49,7 +48,7 @@ static char *checkflags(char **str, int *counter) {
             return flags;
         for (int n = 1; str[i][n] != '\0'; n++)
             if (str[i][n] != 'n' && str[i][n] != 'e' && str[i][n] != 'E')
-                            return flags;
+                return flags;
         *counter = i;
         for (int n = 1; str[i][n]; n++) {
             if (str[i][n] == 'n')
@@ -66,7 +65,7 @@ static void print_e(int i, char *flags, char **str) {
 
     for (i = i + 1; str[i]; i++) {
         error = print_echo_e(str[i]);
-        if (str[i + 1] && error && mx_strlen(str[i]))
+        if (str[i + 1] && error)
             write(1, " ", 1);
     }
     if (flags[0] != 'n' && error)
@@ -80,7 +79,7 @@ int mx_echo_builtin(char **str, t_ush data) {
     if (flags[1] == 'E') {
         for (i = i + 1; str[i]; i++) {
             write(1, str[i], mx_strlen(str[i]));
-            if (str[i + 1] && mx_strlen(str[i]))
+            if (str[i + 1])
                 write(1, " ", 1);
         }
         if (flags[0] != 'n')
