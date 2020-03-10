@@ -1,8 +1,20 @@
 #include "ush.h"
 
-void signal_handler(int signo) {
-	if (signo == SIGINT) {
+void	proc_signal_handler(int signo)
+{
+	if (signo == SIGINT)
+	{
 		mx_printstr("\n");
+		signal(SIGINT, proc_signal_handler);
+	}
+}
+
+void signal_handler(int signo) {
+    extern char **environ;
+
+	if (signo == SIGINT) {
+        mx_printstr("\n");
+        mx_display(environ);
 		signal(SIGINT, signal_handler);
 	} else if (signo == EOF) {
         mx_printstr("\n");
@@ -113,22 +125,43 @@ char **mx_interpretate(char *command) {
     return replace_on_koskav(get_result(command));
 }
 
+static int with_logic(t_ush data, char ***env,int i) {
+    char **logical = mx_strsplit(data.commands[i], '^');
+    char **command;
+    int m_exit = 0;
+    int i_l = -1;
+
+    while (logical[++i_l]) {
+        command = mx_interpretate(logical[i_l]);
+        m_exit = mx_run_command(command, data, env, 1);
+        if (((atoi(mx_get_env_var("?",data.var)) == 1) 
+            && mx_strequ(mx_get_env_var("logical",data.var),"&&")) || 
+            ((atoi(mx_get_env_var("?",data.var)) == 0)
+            && mx_strequ(mx_get_env_var("logical",data.var),"||")))
+            break;
+    }
+    return m_exit;
+}
+
 static int exec_commands(t_ush data, char ***env) {
     int i = -1;
-    int exit = 0;
+    int i_l = -1;
+    int m_exit = 0;
     char **command;
 
     while (data.commands[++i]) {
         if (mx_isemptystr(data.commands[i], 1)) {
             continue;
-        }
-        command = mx_interpretate(data.commands[i]);
-        exit = mx_run_command(command, data, env, 1);
-        if (exit != 1 && exit != 0)
+        } if (!mx_strequ(mx_get_env_var("logical",data.var),"0")) {
+            m_exit = with_logic(data, env, i);
+        } else {
+            command = mx_interpretate(data.commands[i]);
+            m_exit = mx_run_command(command, data, env, 1);
+        } if (m_exit != 1 && m_exit != 0)
             break;
     }
     mx_del_strarr(&command);
-    return exit;
+    return m_exit;
 }
 
 static t_ush *init(int argc, char **argv) {
@@ -137,11 +170,11 @@ static t_ush *init(int argc, char **argv) {
    	char **alias = (char **)malloc(sizeof(char *) * 1000);//arr alias
    	char **commands = (char **)malloc(sizeof(char *) * 100);//arr commands
 
-    data->logical = 0; // -1 &&    1 ||
     data->var = var;
     data->alias = alias;
     data->commands = commands;
     data->var[0] = strdup("?=0");
+    data->var[1] = strdup("logical=0");
     return data;
 }
 
@@ -150,9 +183,9 @@ static int circle_main(char **env, t_ush data) {
     int ret;
 
      while (1) {
-        signal(SIGINT, signal_handler);
         if (isatty(0))
             mx_display(env);
+        signal(SIGINT, signal_handler);
         data.commands = mx_get_input(&input, data, &env);
         if (mx_isemptystr(input, 1))
             continue;
@@ -168,12 +201,17 @@ int main(int argc, char **argv, char **envr) {
     char **env;
     int q;
 
-    // set_input_mode();
     env = mx_init_envr(argc, argv, envr);
     t_ush *data = init(argc, argv);
+    // if (data->commands[0])
+    //     mx_del_strarr(&data->commands);
+    // if (data->var[0])
+    //     mx_del_strarr(&data->var);
+    // if (data->alias[0])
+    //     mx_del_strarr(&data->alias);
     free(data);
     q = circle_main(env, *data);
     mx_del_strarr(&env);
-    // mx_reset_input_mode();
+    // system("leaks -q a.out");
     exit(q);
 }

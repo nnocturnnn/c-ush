@@ -1,6 +1,6 @@
 #include "ush.h"
 
-void mx_errors(enum e_eror errors, char *a) {
+static void f_error(enum e_eror errors, char *a) {
     if (errors == UNSET_ERR) {
         mx_printerr("unset: not enough arguments\n");
     } else if (errors == USH_NF) {
@@ -19,7 +19,11 @@ void mx_errors(enum e_eror errors, char *a) {
         mx_printerr("cd: permission denied: ");
         mx_printerr(a);
         mx_printerr("\n");
-    } else if (errors == CD_NON_DIR) {
+    }
+}
+
+static void s_error(enum e_eror errors, char *a) {
+    if (errors == CD_NON_DIR) {
         mx_printerr("cd: not a directory: ");
         mx_printerr(a);
         mx_printerr("\n");
@@ -33,7 +37,11 @@ void mx_errors(enum e_eror errors, char *a) {
         mx_printerr("ush: permission denied: ");
 		mx_printerr(a);
         mx_printerr("\n");
-    } else if (errors == ENV_ILL) {
+    } 
+}
+
+static void t_error(enum e_eror errors, char *a) {
+    if (errors == ENV_ILL) {
         mx_printerr("env: illegal option -");
 		mx_printerr(a);
         mx_printerr("\n");
@@ -53,6 +61,10 @@ void mx_errors(enum e_eror errors, char *a) {
         mx_printerr(a);
         mx_printerr(": numeric argument required\n");
     }
-    
-    
+}
+
+void mx_errors(enum e_eror errors, char *a) {
+    f_error(errors,a);
+    s_error(errors,a);
+    t_error(errors,a);
 }

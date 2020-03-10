@@ -17,6 +17,7 @@ static int which_check_built(char *command, char *flag) {
     }
     return 1;
 }
+
 static int which_check_path(char *command, char **path, char *flag) {
     int i = -1;
     char *bin_path;
@@ -61,10 +62,10 @@ static int which_with_flag(char **path, char **arg) {
     int	i = 1;
 
     while (arg[i]){
-        flag += which_check_built(arg[i],arg[0]);
-        flag += which_check_path(arg[i], path,arg[0]);
+        flag += which_check_built(arg[i], arg[0]);
+        flag += which_check_path(arg[i], path, arg[0]);
         if (flag == 2) {
-            mx_errors(WHC_NF,arg[i]);
+            mx_errors(WHC_NF, arg[i]);
             return 1;
         }
     flag = 0;
@@ -79,14 +80,13 @@ int mx_which_builtin(char **arg, char **env) {
     
     if (!arg[0])
         return 1;
-    if (mx_get_char_index(arg[0],'-') == 0) {
-        return which_with_flag(path,arg);
+    if (mx_get_char_index(arg[0], '-') == 0) {
+        return which_with_flag(path, arg);
     } else {
         while (arg[++c]) {
             if(which_check_built(arg[c], NULL))
-                if(which_check_path(arg[c],path, NULL))
-                    mx_errors(WHC_NF,arg[c]);
-                
+                if(which_check_path(arg[c], path, NULL))
+                    mx_errors(WHC_NF, arg[c]);
         }
     }
 	return 0;

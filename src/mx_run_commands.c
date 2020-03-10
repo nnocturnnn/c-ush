@@ -5,7 +5,7 @@ static int run_cmd(char *path, char **args, char **env) {
 	pid_t pid;
 
 	pid = fork();
-	signal(SIGINT, signal_handler);
+	signal(SIGINT, proc_signal_handler);
 	if (pid == 0)
 		execve(path, args, env);
 	else if (pid < 0) {

@@ -29,9 +29,12 @@ static char *check_alias(char *input, t_ush data){
     int i = -1;
 
     while(data.alias[++i]) {
-        if ((mx_get_substr_index(input,*mx_strsplit(data.alias[i],'='))) == 0) {
-            input = mx_replace_substr(input,mx_strdup(*mx_strsplit(data.alias[i],'=')),
-            mx_get_env_var(mx_strdup(*mx_strsplit(data.alias[i],'=')), data.alias));
+        if ((mx_get_substr_index(input,
+             *mx_strsplit(data.alias[i], '='))) == 0) {
+            input = mx_replace_substr(input, 
+            mx_strdup(*mx_strsplit(data.alias[i],'=')),
+            mx_get_env_var(mx_strdup(*mx_strsplit(data.alias[i], '=')),
+            data.alias));
         }
     }
     return input;
@@ -205,12 +208,14 @@ static char *mx_get_var_input(char *input, char **var) {
     while (commands[++i]) 
         if (mx_get_char_index(commands[i],'=') == -1) {
             while (commands[++c] && mx_get_char_index(commands[c],'=') != -1) {
-                input = mx_replace_substr(input,get_word_by_char(commands[c],'='),"");
+                input = mx_replace_substr(input,
+                                         get_word_by_char(commands[c],'='),"");
             }
             return input;
         }
     while (commands[++c]){
-        mx_set_var(*mx_strsplit(commands[c],'='),*(mx_strsplit(commands[c],'=') + 1),var);
+        mx_set_var(*mx_strsplit(commands[c],'='),*(mx_strsplit(commands[c],
+                                                               '=') + 1),var);
         input = mx_replace_substr(input,get_word_by_char(commands[c],'='),"");
     }
     mx_del_strarr(&commands);
@@ -246,9 +251,18 @@ int mx_checkdotkoma(char *input) {
     return t;
 }
 
+static char *logical(char *str, char **var) {
+    if (mx_get_substr_index(str, "&&") > -1)
+        mx_set_var("logical","&&",var);
+    if (mx_get_substr_index(str, "||") > -1)
+        mx_set_var("logical","||",var);
+    char *st = mx_replace_substr(mx_replace_substr(str, "&&", "^"),"||", "^");
+    return st;
+}
+
 static char **mx_parse_input(char *input, t_ush data, char ***env) {
     int codetilda = 0;
-    char *rep = check_alias(mx_replace_substr(input, "&&", ";"), data);
+    char *rep = check_alias(logical(input,data.var), data);
     char *nah_tild = replace_tild(rep, *env, &codetilda);
     char **commands = mx_split_commands(nah_tild);
 

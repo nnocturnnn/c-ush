@@ -6,7 +6,7 @@ static int cd_with_flag(char **arg, char **env) {
 
     if (mx_strequ(arg[0], "-P")) {
         mx_change_dir(arg[1], 0, env);
-        mx_set_var("PWD",getcwd(buff, 4096),env);
+        mx_set_var("PWD",getcwd(buff, 4096), env);
         return 0;
     } else if (mx_strequ(arg[0], "-s")) {
         lstat(arg[1],&buffy);
@@ -45,13 +45,13 @@ static int to_change(char *path, char **env, char *cwd) {
     struct stat buffy;
 
     n_cwd = getcwd(buff2, 4096);
-    lstat(path,&buffy);
+    lstat(path, &buffy);
     if ((buffy.st_mode & S_IFMT) == S_IFLNK) {
         if (mx_get_char_index(path,'/') == 0)
-            mx_set_var("PWD",path, env);
+            mx_set_var("PWD", path, env);
         else
-            mx_set_var("PWD",n_cwd,env);
-    } else if (mx_strequ(path, "..") || (mx_get_char_index(path,'/') == 0))
+            mx_set_var("PWD", n_cwd, env);
+    } else if (mx_strequ(path, "..") || (mx_get_char_index(path, '/') == 0))
         mx_set_var("PWD", n_cwd, env);
     else
         mx_set_var("PWD", mx_pathjoin(cwd, path), env);
@@ -68,7 +68,7 @@ int mx_change_dir(char *path, int printh_path, char **env) {
 			print_path(path, env);
 		    mx_printchar('\n');
 		}
-        return to_change(path,env, cwd);
+        return to_change(path, env, cwd);
 	} else {
         if (access(path, F_OK) == -1)
 			mx_errors(CD_NSFORD, path);

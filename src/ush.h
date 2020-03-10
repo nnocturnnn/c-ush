@@ -45,11 +45,11 @@ typedef struct s_ush {
     char **commands;
     char **alias;
     char **var;
-    int logical;
 } t_ush;
 
 #define MX_OK 00
 
+char *mx_replace_dolars(char *nah_tild, char ***env);
 char **replace_on_koskav(char **shit);
 char **mx_interpretate(char *command);
 int mx_unalias(char **arg, char **data);
@@ -60,10 +60,8 @@ int bye_builtin(char **command);
 int false_builtin(char **var);
 int true_builtin(char **var);
 int return_builtin(char **var, char **arg);
-void set_input_mode (void);
 void key_handler(t_ush data);
 int envv_len(char **envv);
-void mx_save_history(char *input, t_ush data);
 void mx_errors(enum e_eror errors, char *a);
 void print_path(char *path, char **env);
 char **mx_init_envr(int argc, char **argv, char **envr);
@@ -90,10 +88,8 @@ int mx_which_builtin(char **arg, char **env);
 int mx_env_builtin(char **arg, t_ush data, char **env);
 char **mx_init_export(char **env);
 int mx_alias(char **arg, char **data);
-void mx_reset_input_mode(void);
 int mx_unsetenv_builtin(char **arg, char **data);
 int	mx_isinenv(char **env, char *var);
-char **mx_remove_env_var(char *name_var, char **env);
 int mx_exit_builtin(char **arg);
 int mx_echo_builtin(char **str, t_ush data);
 
