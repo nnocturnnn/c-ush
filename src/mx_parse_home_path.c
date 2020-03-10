@@ -12,7 +12,7 @@ int mx_isemptystr(char *str, int consider_space) {
 	return 1;
 }
 
-char *mx_parse_home_path(char *path, int reverse, char **env) {
+char *mx_parse_home_path(char *path, char **env) {
     char *new;
     char *home_path = mx_get_env_var("HOME", env);
 

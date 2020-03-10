@@ -22,9 +22,6 @@ static int cd_with_flag(char **arg, char **env) {
 }
 
 static int has_two_args(char **args, char **env) {
-	char buff[4096 + 1];
-    char *cwd = getcwd(buff, 4096);;
-
 	if (args[1]) {
         if (args[0][0] == '-')
             return cd_with_flag(args, env);

@@ -1,6 +1,6 @@
 #include "ush.h"
 
-char **mx_init_envr(int argc, char **argv, char **envr) {
+char **mx_init_envr(char **envr) {
     char **env = (char **)malloc(sizeof(char *) * 100);
     int i = -1;
     char buff[4096 + 1];

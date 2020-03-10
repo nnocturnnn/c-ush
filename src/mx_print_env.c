@@ -1,7 +1,7 @@
 #include "ush.h"
 
 void print_path(char *path, char **env) {
-	char *parsed_home = mx_parse_home_path(path, 0, env);
+	char *parsed_home = mx_parse_home_path(path, env);
 
 	mx_printstr(parsed_home);
 	mx_strdel(&parsed_home);

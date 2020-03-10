@@ -1,9 +1,8 @@
 #include "ush.h"
 
-void	proc_signal_handler(int signo)
+void proc_signal_handler(int signo)
 {
-	if (signo == SIGINT)
-	{
+	if (signo == SIGINT) {
 		mx_printstr("\n");
 		signal(SIGINT, proc_signal_handler);
 	}
@@ -145,7 +144,6 @@ static int with_logic(t_ush data, char ***env,int i) {
 
 static int exec_commands(t_ush data, char ***env) {
     int i = -1;
-    int i_l = -1;
     int m_exit = 0;
     char **command;
 
@@ -164,11 +162,11 @@ static int exec_commands(t_ush data, char ***env) {
     return m_exit;
 }
 
-static t_ush *init(int argc, char **argv) {
+static t_ush *init() {
     t_ush *data = malloc(sizeof(t_ush));
-    char **var = (char **)malloc(sizeof(char *) * 100);//arr variable
+    char **var = (char **)malloc(sizeof(char *) * 1000);//arr variable
    	char **alias = (char **)malloc(sizeof(char *) * 1000);//arr alias
-   	char **commands = (char **)malloc(sizeof(char *) * 100);//arr commands
+   	char **commands = (char **)malloc(sizeof(char *) * 1000);//arr commands
 
     data->var = var;
     data->alias = alias;
@@ -186,6 +184,7 @@ static int circle_main(char **env, t_ush data) {
         if (isatty(0))
             mx_display(env);
         signal(SIGINT, signal_handler);
+        signal(SIGTSTP, signal_handler);
         data.commands = mx_get_input(&input, data, &env);
         if (mx_isemptystr(input, 1))
             continue;
@@ -201,8 +200,15 @@ int main(int argc, char **argv, char **envr) {
     char **env;
     int q;
 
-    env = mx_init_envr(argc, argv, envr);
-    t_ush *data = init(argc, argv);
+    (void)argc;
+    (void)argv;
+    env = mx_init_envr(envr);
+    t_ush *data = init();
+    mx_init_signals();
+    tcgetattr(STDIN_FILENO, mx_get_tty());
+    setvbuf(stdout, NULL, _IONBF, 0);
+    set_input_mode();
+    unset_input_mode();
     // if (data->commands[0])
     //     mx_del_strarr(&data->commands);
     // if (data->var[0])
@@ -211,7 +217,9 @@ int main(int argc, char **argv, char **envr) {
     //     mx_del_strarr(&data->alias);
     free(data);
     q = circle_main(env, *data);
+    unset_input_mode();
+    mx_kill_process();
     mx_del_strarr(&env);
-    // system("leaks -q a.out");
+    // system("leaks -q ush");
     exit(q);
 }

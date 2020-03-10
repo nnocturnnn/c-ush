@@ -72,7 +72,7 @@ static void print_e(int i, char *flags, char **str) {
         write(1, "\n", 1);
 }
 
-int mx_echo_builtin(char **str, t_ush data) {
+int mx_echo_builtin(char **str) {
     int i = 0;
     char *flags = checkflags(str, &i);
 

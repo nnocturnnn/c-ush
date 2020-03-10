@@ -2,18 +2,12 @@
 
 
 static int run_cmd(char *path, char **args, char **env) {
-	pid_t pid;
+	int retval = 0;
+    t_process *process = mx_create_process(1);
 
-	pid = fork();
-	signal(SIGINT, proc_signal_handler);
-	if (pid == 0)
-		execve(path, args, env);
-	else if (pid < 0) {
-        mx_errors(FORK_FAIL, "crash (");
-		return -1;
-	}
-	wait(&pid);
-	return 1;
+    retval = mx_exec_cmd(process, path, args, env);
+    mx_del_process(&process);
+    return 1;
 }
 
 static int is_exec(char *bin_path, struct stat f, char **command, char **env) {
@@ -36,7 +30,7 @@ static int check_bins(char **commands, char **env) {
     while (path && path[++i]) {
         if (mx_get_substr_index(commands[0], path[i]) == 0)
             bin_path = mx_strdup(commands[0]);
-        else 
+        else
             bin_path = mx_pathjoin(path[i], commands[0]);
         if (lstat(bin_path, &f) == -1)
 			mx_strdel(&bin_path);
@@ -50,8 +44,7 @@ static int check_bins(char **commands, char **env) {
 }
 
 int mx_run_command(char **commands, t_ush data, char ***env, int run_mode) {
-    struct stat f;
-    int is_builtin;
+    int is_builtin = 0;
 
     if (run_mode == 0) {
         if (check_bins(commands, *env))

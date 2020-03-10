@@ -5,13 +5,13 @@ static char **getvars(char *nah_tild) {
                     * (mx_count_words(nah_tild, ' ')) + 5);
     int counter = 0;
     
-    for (int i = 0; i < strlen(nah_tild); i++) {
+    for (int i = 0; i < mx_strlen(nah_tild); i++) {
         if (nah_tild[i] == '$' && nah_tild[i + 1] != '(' 
             && nah_tild[i + 1] != ' '  && nah_tild[i + 1] != '\0') {
             int arr[2];
 
             arr[0] = i;
-            while (nah_tild[i] != ' ' && i < strlen(nah_tild) 
+            while (nah_tild[i] != ' ' && i < mx_strlen(nah_tild) 
                    && nah_tild[i - 1] != '}')
                 i++;
             arr[1] = i;

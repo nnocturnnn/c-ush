@@ -22,6 +22,7 @@
 #include <sys/xattr.h>
 #include <time.h>
 #include <termios.h>
+#include <spawn.h>
 #include "../libmx/inc/libmx.h"
 
 enum e_eror{
@@ -47,6 +48,26 @@ typedef struct s_ush {
     char **var;
 } t_ush;
 
+#define MX_W_INT(m) (*(int*) & (m))
+#define MX_WSTOPSIG(m) (MX_W_INT(m) >> 8)
+#define MX_WSTATUS(m) (MX_W_INT(m) & 0177)
+#define MX_WIFSTOPPED(m) (MX_WSTATUS(m) == _WSTOPPED && MX_WSTOPSIG(m) != 0x13)
+#define MX_ISREG(m) (((m) & S_IFMT) == S_IFREG)
+#define MX_WAIT_TO_INT(m) (*(int *) & (m))
+#define MX_WEXITSTATUS(x) ((MX_WAIT_TO_INT(x) >> 8) & 0x000000ff)
+
+typedef struct s_process {
+    int input_mode;
+    char *commands;
+    pid_t pid;
+    pid_t gpid;
+    int pos;
+    int status;
+    sigset_t signals;
+    posix_spawn_file_actions_t actions;
+    posix_spawnattr_t attrs;
+} t_process;
+
 #define MX_OK 00
 
 char *mx_replace_dolars(char *nah_tild, char ***env);
@@ -64,9 +85,9 @@ void key_handler(t_ush data);
 int envv_len(char **envv);
 void mx_errors(enum e_eror errors, char *a);
 void print_path(char *path, char **env);
-char **mx_init_envr(int argc, char **argv, char **envr);
+char **mx_init_envr(char **envr);
 void mx_display(char **env);
-char *mx_parse_home_path(char *path, int reverse, char **env);
+char *mx_parse_home_path(char *path, char **env);
 int mx_isemptystr(char *str, int consider_space);
 void mx_exit_shell(char **env);
 char *mx_get_env_var(char *var, char **env);
@@ -77,7 +98,6 @@ void proc_signal_handler(int signo);
 int mx_run_command(char **commands, t_ush data, char ***env, int run_mode);
 void mx_print_env(char **env);
 int mx_export_builtin(char **arg, t_ush data, char **env);
-int mx_echo_builtin(char **arg, t_ush data);
 int mx_cd_builtin(char **arg, char **env);
 int mx_change_dir(char *path, int printh_path, char **env);
 int mx_find_env_var(char *var,char **env);
@@ -91,6 +111,20 @@ int mx_alias(char **arg, char **data);
 int mx_unsetenv_builtin(char **arg, char **data);
 int	mx_isinenv(char **env, char *var);
 int mx_exit_builtin(char **arg);
-int mx_echo_builtin(char **str, t_ush data);
+int mx_echo_builtin(char **str);
+t_process *mx_create_process(int im);
+t_list **mx_get_plist(void);
+int mx_exec_cmd(t_process *proc, char *path, char **args, char **env);
+void mx_init_signals(void);
+void mx_del_process(t_process **process);
+void mx_del_node_list(t_list **list, t_process **d_p);
+void mx_kill_process(void);
+void mx_continue_process(t_process *process, t_list **all_processes, int fd);
+int mx_fg(char **args, int fd);
+t_list *mx_get_last_process(t_list *processes);
+struct termios *mx_get_tty(void);
+void set_input_mode(void);
+void unset_input_mode(void);
+int mx_jobs(char **args, int fd);
 
-#endif 
+#endif

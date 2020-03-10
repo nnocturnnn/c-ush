@@ -20,7 +20,6 @@ int mx_alias(char **arg, char **data) {
 
 int mx_unalias(char **arg, char **data) {
     int i = -1;
-    int q = -1;
     int var_pos;
     int max;
 

@@ -6,7 +6,7 @@ void mx_display(char **env) {
     char *parsed_cwd;
 
     cwd = getcwd(buff, 4096);
-    parsed_cwd = mx_parse_home_path(cwd, 0, env);
+    parsed_cwd = mx_parse_home_path(cwd, env);
     if (!parsed_cwd)
         mx_printstr("\033[0;32mu$h> \033[0m ");
     else {

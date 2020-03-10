@@ -6,13 +6,16 @@ static int check_b1(char **command, t_ush data, char ***env){
 	} else if (!mx_get_substr_index(command[0], "bye")) {
         return bye_builtin(command);
     } else if (!mx_get_substr_index(command[0], "echo")) {
-        mx_set_var("?",mx_itoa(mx_echo_builtin(command , data)), data.var);
+        mx_set_var("?",mx_itoa(mx_echo_builtin(command)), data.var);
 		return 1;
     } else if (!mx_get_substr_index(command[0], "alias")) {
         mx_set_var("?",mx_itoa(mx_alias(command + 1, data.alias)), data.var);
         return 1;
     } else if (!mx_get_substr_index(command[0], "cd")) {
         mx_set_var("?",mx_itoa(mx_cd_builtin(command + 1, *env)), data.var);
+		return 1;
+    } else if (!mx_get_substr_index(command[0], "jobs")) {
+        mx_set_var("?",mx_itoa(mx_jobs(command + 1, 1)), data.var);
 		return 1;
     } else 
         return 0;
@@ -51,7 +54,7 @@ static int check_b3(char **command, t_ush data, char ***env){
     } else if (!mx_get_substr_index(command[0], "False"))
         return false_builtin(data.var);
     else if (!mx_get_substr_index(command[0],"fg")) {
-        //command
+        mx_set_var("?", mx_itoa(mx_fg(command + 1, 1)), data.var);
 		return 1;
 	} else if (!mx_get_substr_index(command[0],"return"))
 		return return_builtin(data.var, command + 1);

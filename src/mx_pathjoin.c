@@ -12,8 +12,6 @@ static int mx_strendswith(char *s1, char *s2) {
 }
 
 char *mx_pathjoin(char *p1, char *p2) {
-	char *tmp2;
-
 	if (!p2 || !p1)
 		return (NULL);
 	if (!mx_strendswith(p1, "/")) {
