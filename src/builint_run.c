@@ -68,14 +68,14 @@ static int check_b3(char **command, t_ush data, char ***env){
         return 0;
 }
 
-char **mx_rep(char **command, char **env) {
+char **mx_rep(char **command, char **env, char **var) {
     for (int k = 0; command[k] != NULL; k++)
-        command[k] = mx_replace_dolars(command[k], &env);
+        command[k] = mx_replace_dolars(command[k], &env, var);
     return command;
 }
 
 int check_builtins(char **command, t_ush data, char ***env) {
-    command = mx_rep(command, *(env));
+    command = mx_rep(command, *(env), data.var);
     int q = check_b1(command, data, env);
 
     if (q != 1 && q != 0) 

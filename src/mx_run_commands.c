@@ -1,10 +1,10 @@
 #include "ush.h"
 
-
 static int run_cmd(char *path, char **args, char **env) {
 	int retval = 0;
     t_process *process = mx_create_process(1);
 
+    signal(SIGINT,proc_signal_handler);
     retval = mx_exec_cmd(process, path, args, env);
     mx_del_process(&process);
     return 1;

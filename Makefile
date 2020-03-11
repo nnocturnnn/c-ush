@@ -33,6 +33,11 @@ SRC = builint_run.c \
 		mx_jobs.c \
 		mx_tty_funcs.c \
 		process_functions.c \
+		signals.c \
+		interpr.c \
+		format_arg.c \
+		input_on_speeed.c \
+		list_input.c \
 
 INCLUDE = -I $(LBMXD) \
 	-I $(INCD) \

@@ -4,7 +4,7 @@ static int which_check_built(char *command, char *flag) {
     int i = -1;
     char *builtin[] = {"exit","alias","cd","echo","export","unset","which",
                        "pwd","env","fg","bye","return","unalias","True",
-                       "False","set", NULL};
+                       "False","set","jobs", NULL};
     while (builtin[++i] != NULL) {
         if (mx_strequ(command,builtin[i])) {
             if (!mx_strequ(flag,"-s")) {

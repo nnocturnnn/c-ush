@@ -76,6 +76,8 @@ int mx_echo_builtin(char **str) {
     int i = 0;
     char *flags = checkflags(str, &i);
 
+    if (yoyoyo(str))
+        return 0;
     if (flags[1] == 'E') {
         for (i = i + 1; str[i]; i++) {
             write(1, str[i], mx_strlen(str[i]));

@@ -70,7 +70,9 @@ typedef struct s_process {
 
 #define MX_OK 00
 
-char *mx_replace_dolars(char *nah_tild, char ***env);
+void signal_handler(int signo);
+void proc_signal_handler(int signo);
+char *mx_replace_dolars(char *nah_tild, char ***env, char **vars);
 char **replace_on_koskav(char **shit);
 char **mx_interpretate(char *command);
 int mx_unalias(char **arg, char **data);
@@ -119,12 +121,22 @@ void mx_init_signals(void);
 void mx_del_process(t_process **process);
 void mx_del_node_list(t_list **list, t_process **d_p);
 void mx_kill_process(void);
+bool mx_check_quotes(char *input);
+int mx_checkclosequots(char *input);
 void mx_continue_process(t_process *process, t_list **all_processes, int fd);
 int mx_fg(char **args, int fd);
 t_list *mx_get_last_process(t_list *processes);
 struct termios *mx_get_tty(void);
 void set_input_mode(void);
 void unset_input_mode(void);
+void mx_skip_expansion(char *input, unsigned int *i);
+char **get_result(char *command);
+char *get_formated_arg(char *str);
+t_list *mx_split_command(char *command);
+char **mx_split_commands(char *command);
+bool mx_isescape_char(char *input, int i);
+int mx_skip_quotes(char *input, unsigned int *i, char c);
 int mx_jobs(char **args, int fd);
+int mx_checkdotkoma(char *input);
 
 #endif
