@@ -32,3 +32,14 @@ int return_builtin(char **var, char **arg) {
         return 1;
     }
 }
+
+int builtin(char **arg, t_ush data, char ***env) {
+    if (check_builtins(arg, data, env))
+        return 0;
+    else {
+        mx_printerr("ush: no such builtin: ");
+        mx_printerr(arg[0]);
+        mx_printerr("\n");
+        return 1;
+    }
+}

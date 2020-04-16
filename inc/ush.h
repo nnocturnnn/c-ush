@@ -40,13 +40,14 @@ enum e_eror{
     ENV_OPTION_REQ,
     WHC_NF,
     ERR_NAR,
+    PWD_ERR,
 };
 
 typedef struct s_ush {
     char **commands;
     char **alias;
     char **var;
-} t_ush;
+}              t_ush;
 
 #define MX_W_INT(m) (*(int*) & (m))
 #define MX_WSTOPSIG(m) (MX_W_INT(m) >> 8)
@@ -66,13 +67,12 @@ typedef struct s_process {
     sigset_t signals;
     posix_spawn_file_actions_t actions;
     posix_spawnattr_t attrs;
-} t_process;
+}              t_process;
 
 #define MX_OK 00
 
 void signal_handler(int signo);
 void proc_signal_handler(int signo);
-char *mx_replace_dolars(char *nah_tild, char ***env, char **vars);
 char **replace_on_koskav(char **shit);
 char **mx_interpretate(char *command);
 int mx_unalias(char **arg, char **data);
@@ -88,7 +88,7 @@ int envv_len(char **envv);
 void mx_errors(enum e_eror errors, char *a);
 void print_path(char *path, char **env);
 char **mx_init_envr(char **envr);
-void mx_display(char **env);
+void mx_display(char **env, char **var);
 char *mx_parse_home_path(char *path, char **env);
 int mx_isemptystr(char *str, int consider_space);
 void mx_exit_shell(char **env);
@@ -119,7 +119,7 @@ t_list **mx_get_plist(void);
 int mx_exec_cmd(t_process *proc, char *path, char **args, char **env);
 void mx_init_signals(void);
 void mx_del_process(t_process **process);
-void mx_del_node_list(t_list **list, t_process **d_p);
+void mx_del_node_list(t_list **list, t_process **del_proc);
 void mx_kill_process(void);
 bool mx_check_quotes(char *input);
 int mx_checkclosequots(char *input);
@@ -138,5 +138,17 @@ bool mx_isescape_char(char *input, int i);
 int mx_skip_quotes(char *input, unsigned int *i, char c);
 int mx_jobs(char **args, int fd);
 int mx_checkdotkoma(char *input);
+int builtin(char **arg, t_ush data, char ***env);
+char *repwithskob(char *n, char ***env, char **s, int *z);
+char *repwithoutskob(char *n, char ***env, char **s, int *z);
+char **mx_rep(char **command, char **env, char **var);
+char *rec_cord(char *str, char *word1, char *word2, int coord);
+char *mx_replace_dolars(char *n, char ***env, char **s);
+char *replaceslesh(char *n);
+char **get(char *n);
+char **getslesh(char *n);
+void mx_set_input_mode(void);
+void mx_unset_input_mode(void);
+void mx_kill_all_proc(void);
 
 #endif

@@ -5,8 +5,9 @@ int mx_alias(char **arg, char **data) {
 
     if (!arg[0]) {
         mx_print_env(data);
-    } else {
-        while(arg[++i]) {
+    } 
+    else {
+        while (arg[++i]) {
             if (mx_get_char_index(arg[i], '=') == 0 && mx_strlen(arg[i]) == 1){
                 mx_errors(USH_BAD_ASSIGN, ":(");
                 return 1;

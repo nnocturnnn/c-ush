@@ -8,7 +8,8 @@ int mx_atoi(const char *str){
     int i = 0;
     int flag = 1;
     int res = 0;
-    if(str[0] == '-'){
+    
+    if (str[0] == '-'){
         flag = -1;
         i++;
     }

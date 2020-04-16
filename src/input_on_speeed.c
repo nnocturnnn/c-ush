@@ -92,16 +92,20 @@ int mx_checkclosequots(char *input) {
 }
 
 void mx_set_var(char *key, char *value, char **var) {
-	int	pos = mx_find_env_var(key, var);
-	char *tmp = mx_strjoin("=", value);
+    char *tmp = mx_strjoin("=", value);
+    int	pos;
 
+    if (mx_get_char_index(key,'=') > 0)
+        key[mx_strlen(key) - 1] = '\0';
+	pos = mx_find_env_var(key, var);
 	if (var[pos]) {
 		free(var[pos]);
 		if (value)
 			var[pos] = mx_strjoin(key, tmp);
 		else
 			var[pos] = mx_strjoin(key, "=");
-	} else {
+	} 
+    else {
 		if (value)
 			var[pos] = mx_strjoin(key, tmp);
 		else

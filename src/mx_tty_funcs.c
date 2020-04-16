@@ -6,7 +6,7 @@ struct termios *mx_get_tty(void) {
     return &tty;
 }
 
-void set_input_mode(void) {
+void mx_set_input_mode(void) {
     struct termios tty;
 
     tcgetattr(STDIN_FILENO, &tty);
@@ -16,6 +16,6 @@ void set_input_mode(void) {
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &tty);
 }
 
-void unset_input_mode(void) {
+void mx_unset_input_mode(void) {
     tcsetattr(STDIN_FILENO, TCSAFLUSH, mx_get_tty());
 }

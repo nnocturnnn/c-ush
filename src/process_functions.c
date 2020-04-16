@@ -10,15 +10,6 @@ static void set_signals(sigset_t *signals, int im) {
         sigdelset(signals, SIGTSTP);
 }
 
-t_list *mx_get_last_process(t_list *processes) {
-    for (t_list *cur = processes; cur; cur = cur->next) {
-        if (!cur->next) {
-            return cur;
-        }
-    }
-    return NULL;
-}
-
 t_process *mx_create_process(int im) {
     t_process *process = malloc(sizeof(t_process));
 
@@ -47,30 +38,7 @@ void mx_del_process(t_process **process) {
     }
 }
 
-void mx_del_node_list(t_list **list, t_process **d_p) {
-    t_list *cur = *list;
-    t_list *tmp = NULL;
-    t_process *f_p = (t_process*)cur->data;
-
-    if (f_p->pid == (*d_p)->pid) {
-        mx_del_process(d_p);
-        tmp = *list;
-        *list = (*list)->next;
-        free(tmp);
-        return;
-    }
-    for (cur = *list; cur; cur = cur->next) {
-        f_p = (t_process*)cur->next->data;
-        if (f_p->pid == (*d_p)->pid)
-            break;
-    }
-    tmp = cur->next;
-    cur->next = tmp->next;
-    free(tmp);
-    mx_del_process(d_p);
-}
-
-void mx_kill_process(void) {
+void mx_kill_all_proc(void) {
     t_list **processes = mx_get_plist();
     t_process *tmp = NULL;
 
@@ -78,28 +46,5 @@ void mx_kill_process(void) {
         tmp = (t_process*)cur->data;
         kill(-tmp->gpid, SIGKILL);
         mx_del_node_list(processes, &tmp);
-    }
-}
-
-t_list **mx_get_plist(void) {
-    static t_list *list = NULL;
-
-    return &list;
-}
-
-void mx_continue_process(t_process *process, t_list **all_processes, int fd) {
-    if (kill(-process->gpid, SIGCONT)) {
-        fprintf(stderr, "fg: %s\n", strerror(errno));
-    }
-    dprintf(fd, "[%d]    %d continued  %s\n", process->pos, process->pid,
-            process->commands);
-    if (waitpid(process->gpid, &process->status, WUNTRACED) != -1) {
-        if (!MX_WIFSTOPPED(process->status)) {
-            mx_del_node_list(all_processes, &process);
-        }
-        else if (MX_WIFSTOPPED(process->status)) {
-            printf("[%d]    %d suspended  %s\n", process->pos, process->pid,
-                   process->commands);
-        }
     }
 }

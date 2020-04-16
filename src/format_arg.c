@@ -34,7 +34,7 @@ char *get_formated_arg(char *str) {
             continue;
         }
         if (mx_isescape_char(str, i + 1) && str[i + 1] != '$' && !is_quotes[0] 
-        && !is_quotes[1]) {
+            && !is_quotes[1]) {
             i++;
         }
         result[index++] = str[i];

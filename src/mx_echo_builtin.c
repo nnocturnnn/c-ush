@@ -22,18 +22,18 @@ static int print_echo_d(char *str, int *i) {
 
 static int print_echo_e(char *str) {
     char buf;
-
     for (int i = 0; str[i] != '\0'; i++) {
-        if(str[i] == '\\' && str[i + 1] == '\\')
+        if (str[i] == '\\' && str[i + 1] == '\\')
             buf = '\\';
         else if (str[i] == '\\' && str[i + 1] == '0' && ++i > 0)
             buf = '\0';
         else if ((buf = print_echo_d(&str[i], &i)) != -1);
         else if (str[i] == '\\' && str[i + 1] == 'c' && ++i > 0)
             return 0;
-        else
+        else if (str[i] != '\\')
             buf = str[i];
-        write(1, &buf, 1);
+        if (str[i] != '\\' || (str[i] == '\\' && str[i + 1] == '\\'))
+            write(1, &buf, 1);
     }
     return 1;
 }

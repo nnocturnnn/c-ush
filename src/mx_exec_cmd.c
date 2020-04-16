@@ -47,7 +47,7 @@ static void add_process(t_process *process) {
 int mx_exec_cmd(t_process *process, char *path, char **args, char **env) {
     int retval = 0;
 
-    unset_input_mode();
+    mx_unset_input_mode();
     if (!run_process(process, path, args, env)) {
         fprintf(stderr, "ush: %s: %s\n", path,
                 strerror(process->status));
@@ -59,6 +59,6 @@ int mx_exec_cmd(t_process *process, char *path, char **args, char **env) {
         }
     }
     tcsetpgrp(STDOUT_FILENO, getpgrp());
-    unset_input_mode();
+    mx_unset_input_mode();
     return retval != 126 ? MX_WEXITSTATUS(process->status) : retval;
 }

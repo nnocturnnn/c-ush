@@ -11,12 +11,13 @@ void signal_handler(int signo) {
 
 	if (signo == SIGINT) {
         mx_printstr("\n");
-        mx_display(environ);
+        mx_display(environ,NULL);
 		signal(SIGINT, signal_handler);
-	} else if (signo == EOF) {
-        mx_printstr("\n");
+	} 
+    else if (signo == EOF) {
 		signal(EOF, signal_handler);
-    } else if (signo == SIGTSTP) {
+    } 
+    else if (signo == SIGTSTP) {
         signal(SIGTSTP, signal_handler);
     }
 }

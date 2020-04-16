@@ -24,21 +24,22 @@ static int exec_commands(t_ush data, char ***env) {
     char **command;
 
     while (data.commands[++i]) {
-        if (mx_isemptystr(data.commands[i], 1)) {
+        if (mx_isemptystr(data.commands[i], 1))
             continue;
-        } if (!mx_strequ(mx_get_env_var("logical",data.var),"0")) {
+        if (!mx_strequ(mx_get_env_var("logical",data.var),"0"))
             m_exit = with_logic(data, env, i);
-        } else {
+        else {
             command = mx_interpretate(data.commands[i]);
             m_exit = mx_run_command(command, data, env, 1);
-        } if (m_exit != 1 && m_exit != 0)
+        } 
+        if (m_exit != 1 && m_exit != 0)
             break;
     }
     mx_del_strarr(&command);
     return m_exit;
 }
 
-static t_ush *init() {
+static t_ush *init(char **env) {
     t_ush *data = malloc(sizeof(t_ush));
     char **var = (char **)malloc(sizeof(char *) * 1000);//arr variable
    	char **alias = (char **)malloc(sizeof(char *) * 1000);//arr alias
@@ -49,6 +50,9 @@ static t_ush *init() {
     data->commands = commands;
     data->var[0] = strdup("?=0");
     data->var[1] = strdup("logical=0");
+    data->var[2] = strdup("PROMPT=standart");
+    data->var[4] = strdup("PROMPT1=minimal");
+    data->var[3] = mx_strjoin("PATH=",mx_get_env_var("PATH",env));
     return data;
 }
 
@@ -58,7 +62,7 @@ static int circle_main(char **env, t_ush data) {
 
      while (1) {
         if (isatty(0))
-            mx_display(env);
+            mx_display(env, data.var);
         signal(SIGINT, signal_handler);
         signal(SIGTSTP, signal_handler);
         data.commands = mx_get_input(&input, data, &env);
@@ -79,17 +83,16 @@ int main(int argc, char **argv, char **envr) {
     (void)argc;
     (void)argv;
     env = mx_init_envr(envr);
-    t_ush *data = init();
+    t_ush *data = init(envr);
     mx_init_signals();
     tcgetattr(STDIN_FILENO, mx_get_tty());
     setvbuf(stdout, NULL, _IONBF, 0);
-    set_input_mode();
-    unset_input_mode();
+    mx_set_input_mode();
+    mx_unset_input_mode();
     q = circle_main(env, *data);
     free(data);
-    unset_input_mode();
-    mx_kill_process();
+    mx_unset_input_mode();
+    mx_kill_all_proc();
     mx_del_strarr(&env);
-    // system("leaks -q ush");
     exit(q);
 }

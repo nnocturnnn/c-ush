@@ -43,10 +43,12 @@ static int export_with_argument(int i, char **arg, char **env, t_ush data) {
         if (mx_get_char_index(arg[i], '=') == 0 && mx_strlen(arg[i]) == 1){
                 mx_errors(USH_BAD_ASSIGN, ":(");
                 return 1;
-            } else 
-                mx_set_var(*mx_strsplit(arg[i], '='),
+            } 
+            else
+                mx_set_var(*(mx_strsplit(arg[i], '=')),
                            *(mx_strsplit(arg[i], '=') + 1), env);
-        } else {
+        }
+        else {
             val = mx_get_env_var(arg[i], data.var);
             mx_set_var(arg[i], val, env);
         }
@@ -63,7 +65,7 @@ int mx_export_builtin(char **arg, t_ush data, char **env) {
         mx_del_strarr(&sorted_env);
         return 0;
     }
-    while(arg[++i]) {
+    while (arg[++i]) {
         export_with_argument(i, arg, env, data);
     }
 	return 0;

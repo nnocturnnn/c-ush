@@ -38,6 +38,9 @@ SRC = builint_run.c \
 		format_arg.c \
 		input_on_speeed.c \
 		list_input.c \
+		mx_cont_proc.c \
+		proc_list_func.c \
+		trash_dollar.c \
 
 INCLUDE = -I $(LBMXD) \
 	-I $(INCD) \

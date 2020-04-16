@@ -83,25 +83,25 @@ static bool check_args(char **args) {
 }
 
 int mx_fg(char **args, int fd) {
+    t_list **all_processes = mx_get_plist();
     t_list *process = NULL;
     t_process *f_process = NULL;
-    t_list **all_processes = mx_get_plist();
 
     if (!check_args(args))
         return 1;
     process = get_process(args[0]);
     if (process) {
         f_process = (t_process*)process->data;
-        unset_input_mode();
+        mx_unset_input_mode();
         tcsetpgrp(STDOUT_FILENO, f_process->gpid);
         mx_continue_process(f_process, all_processes, fd);
         tcsetpgrp(STDOUT_FILENO, getpgrp());
-        set_input_mode();
+        mx_set_input_mode();
     }
     else {
         fprintf(stderr, "%s", *args ? "" : "fg: no current jobs\n");
         return 1;   
     }
-    unset_input_mode();
+    mx_unset_input_mode();
     return f_process->status;
 }

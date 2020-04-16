@@ -45,7 +45,7 @@ char *replace_tild(char *rep, char **env, int *i) {
     i++;
     rep = mx_replace_substr(rep, "~+", mx_get_env_var("PWD", env));
     rep = mx_replace_substr(rep,"~-",mx_get_env_var("OLDPWD", env));
-    if(rep[it + 1] == ' ' || rep[it + 1] == '\0' || rep[it + 1] == '/')
+    if (rep[it + 1] == ' ' || rep[it + 1] == '\0' || rep[it + 1] == '/')
         rep = mx_replace_substr(rep, "~", mx_get_env_var("HOME", env));
     else
         rep = mx_replace_substr(rep, "~", "/Users/");

@@ -43,16 +43,17 @@ int mx_pwd_builtin(char **arg, char **env) {
         mx_printstr(mx_get_env_var("PWD", env));
         mx_printstr("\n");
         return 0;
-    } else if (mx_strequ(arg[0], "-P")){
+    } 
+    else if (mx_strequ(arg[0], "-P")){
         cwd = getcwd(buff, 4096);
         mx_printstr(cwd);
         mx_printstr("\n");
         return 0;
-    } else if (arg[0][0] == '-') {
-        mx_printerr("pwd: bad option: ");
-        mx_printerr(arg[0]);
-        mx_printerr("\n");
-    } else 
+    } 
+    else if (arg[0][0] == '-') {
+       mx_errors(PWD_ERR, arg[0]);
+    } 
+    else 
         mx_printerr("pwd: too many arguments\n");
     return 1;
 }
@@ -82,7 +83,8 @@ int mx_which_builtin(char **arg, char **env) {
         return 1;
     if (mx_get_char_index(arg[0], '-') == 0) {
         return which_with_flag(path, arg);
-    } else {
+    } 
+    else {
         while (arg[++c]) {
             if(which_check_built(arg[c], NULL))
                 if(which_check_path(arg[c], path, NULL))

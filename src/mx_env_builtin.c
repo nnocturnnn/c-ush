@@ -1,19 +1,18 @@
 #include "ush.h"
 
 static int p_env_arg(char **arg, t_ush data, char **env) {
-    char **path = (char **)malloc(sizeof(char *) * 2);
-
-    path[0] = mx_strdup("PATH");
     if (!arg[0]) {
         mx_errors(ENV_OPTION_REQ, arg[0]);
         return 1;
-    } else {
+    } 
+    else {
         if (!arg[1]) {
             mx_print_env(env);
             return 0;
-        } else {
-            mx_unsetenv_builtin(path, env);
-            return mx_run_command(arg + 2, data, &env, 0);
+        } 
+        else {
+            mx_set_var("PATH", arg[1], env);
+            return mx_run_command(arg + 2, data, &env, 2);
         }
     }
     return 1;
@@ -23,12 +22,14 @@ static int u_env_arg(char **arg, char **env, t_ush data) {
     if (!arg[0]) {
         mx_errors(ENV_OPTION_REQ, arg[0]);
         return 1;
-    } else {
+    } 
+    else {
         mx_unsetenv_builtin(arg, env);
         if (!arg[1]) {
             mx_print_env(env);
             return 0;
-        } else 
+        } 
+        else 
             return mx_run_command(arg + 1, data, &env, 0);
     }
     return 1;
